@@ -13,12 +13,6 @@
             </template>
           </el-table-column>
           <el-table-column align="center"  prop="ParentName" label="父级Id" ></el-table-column>
-          <el-table-column align="center"  prop="sort" label="排序" ></el-table-column>
-          <el-table-column align="center"  prop="img" label="分类背景图片" >
-            <template slot-scope="scope">
-               <img :src="scope.row.img" width="80">
-            </template>
-          </el-table-column>
           <el-table-column align="center" label="操作" width="200" class-name="small-padding fixed-width">
              <template slot-scope="scope">
                 <el-button type="primary" size="mini" @click="handlEdit(scope.$index,scope.row)">编辑</el-button>
@@ -26,7 +20,6 @@
              </template>
           </el-table-column>
         </el-table>
-        <!-- <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit"/> -->
       </el-col>
     </el-row>
 

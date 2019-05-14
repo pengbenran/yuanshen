@@ -9,7 +9,7 @@
                 <el-radio v-model="AddData.root" label="2"  @change = 'changeRadio'>否</el-radio>
                 <el-alert style="padding:0px" title="注：根级也就是设置初始等级" type="success"></el-alert>
             </el-form-item>
-            <el-form-item label="父级Id" :label-width="formLabelWidth" prop="parentId" v-if="AddData.root == 2">
+            <el-form-item label="关联父级" :label-width="formLabelWidth" prop="parentId" v-if="AddData.root == 2">
                 <el-select v-model="AddData.parentId" >
                     <el-option
                     v-for="item in GoodsCatList"
@@ -44,7 +44,7 @@
     </div>
 </template>
 <script>
-// import API from "@/api/goods";
+ import {kindAdd} from "@/api/kind.js";
 // import Uploadimg from "@/components/UpLoadImg/UpLoadImg";
 export default {
     props:{
@@ -70,7 +70,7 @@ export default {
            formLabelWidth:'120px',
            AddDatarules:{
              name:[
-                { required: true, message: '等级名称', trigger: 'blur' },
+                { required: true, message: '分类名称', trigger: 'blur' },
              ],
              root:[
                 { required: true, message: '请设置根级', trigger: 'blur' },

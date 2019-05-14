@@ -67,6 +67,18 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/label',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Label',
+        component: () => import('@/views/label/index'),
+        meta: { title: '标签管理', icon: 'dashboard' }
+      }
+    ]
+  },
+  {
     path: '/kind',
     component: Layout,
     children: [
