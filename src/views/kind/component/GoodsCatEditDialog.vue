@@ -11,7 +11,7 @@
         <el-alert style="padding:0px" title="注：根级也就是设置初始等级" type="success"></el-alert>
       </el-form-item>
       <el-form-item label="父级Id" :label-width="formLabelWidth" prop="parentId"  v-if="EdiData.root == 2">
-        <el-select v-model="EdiData.parentId" >
+        <!-- <el-select v-model="EdiData.parentId" >
           <el-option
           v-for="item in GoodsCatList"
           :key="item.catId"
@@ -19,7 +19,7 @@
           :value="item.catId">
           <span style="float: left">{{ item.name }}</span>
         </el-option>
-      </el-select>
+      </el-select> -->
     </el-form-item>
     <el-form-item label="排序" :label-width="formLabelWidth" prop="sort">
       <el-input v-model="EdiData.sort" placeholder="请输入内容" autocomplete="off"></el-input>
@@ -45,14 +45,6 @@
 // import API from "@/api/goods";
 // import Uploadimg from "@/components/UpLoadImg/UpLoadImg";
 export default {
-    props:{
-      GoodsCatList:{
-          type:Array,
-          default:[]
-      }
-    },
-    watch:{
-    },
     components:{},
     data () {
         return {
