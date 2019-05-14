@@ -16,3 +16,21 @@ export function GetList(params) {
     data:params
   })
 }
+
+//分类删除
+export function DeleteList(params) {
+  return request({
+    url: '/project/product/item',
+    method: 'delete',
+    params
+  })
+}
+
+//分类修改
+export function UpdataList(params) {
+  return request({
+    url: '/project/product/item',
+    method: 'put',
+     data:params
+  })
+}

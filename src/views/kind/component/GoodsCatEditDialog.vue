@@ -1,117 +1,135 @@
 <template>   
-  <!--商品分类添加-->
-  <el-dialog title="商品分类编辑" :visible.sync="EditShow" >
-    <el-form :model="EdiData"  :rules="EdiDatarules"  ref="EditruleForm">
-      <el-form-item label="分类名称" :label-width="formLabelWidth"  prop="name">
-        <el-input v-model="EdiData.name" placeholder="请输入内容" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="是否为根级" :label-width="formLabelWidth"  prop="root">
-        <el-radio v-model="EdiData.root" label="1"  @change = 'EditchangeRadio'>是</el-radio>
-        <el-radio v-model="EdiData.root" label="2"  @change = 'EditchangeRadio'>否</el-radio>
-        <el-alert style="padding:0px" title="注：根级也就是设置初始等级" type="success"></el-alert>
-      </el-form-item>
-      <el-form-item label="父级Id" :label-width="formLabelWidth" prop="parentId"  v-if="EdiData.root == 2">
-        <!-- <el-select v-model="EdiData.parentId" >
-          <el-option
-          v-for="item in GoodsCatList"
-          :key="item.catId"
-          :label="item.name"
-          :value="item.catId">
-          <span style="float: left">{{ item.name }}</span>
-        </el-option>
-      </el-select> -->
-    </el-form-item>
-    <el-form-item label="排序" :label-width="formLabelWidth" prop="sort">
-      <el-input v-model="EdiData.sort" placeholder="请输入内容" autocomplete="off"></el-input>
-      <el-alert style="padding:0px" title="注：越大代表排在越后" type="success"></el-alert>
-    </el-form-item>
-    <el-form-item label="图片" :label-width="formLabelWidth" prop="img">
-      <div class="avatar-uploader" @click="UpLoadShow(3,1,2)">
-        <img v-if="EdiData.img" :src="EdiData.img" class="avatar">
-        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-      </div>
-    </el-form-item>
-  </el-form>
-  <div slot="footer" class="dialog-footer">
-    <el-button @click="EditShow = false">取 消</el-button>
-    <el-button type="primary" @click="editData">确 定</el-button>
-  </div>
+    <el-dialog title="分类新增" :visible.sync="AddShow">
+        <el-form :model="AddData"  :rules="AddDatarules" ref="AddruleForm">
+            <el-form-item label="分类名称" :label-width="formLabelWidth"  prop="itemName">
+                <el-input v-model="AddData.itemName" placeholder="请输入内容" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="是否为根级" :label-width="formLabelWidth"  prop="isRoot">
+                <el-radio v-model="AddData.isRoot" label="0"  @change = 'changeRadio'>是</el-radio>
+                <el-radio v-model="AddData.isRoot" label="1"  @change = 'changeRadio'>否</el-radio>
+                <el-alert style="padding:0px" title="注：根级也就是设置初始等级" type="success"></el-alert>
+            </el-form-item>
+            <el-form-item label="关联父级" :label-width="formLabelWidth" prop="parentId" v-if="AddData.isRoot == 1">
+                <el-select v-model="AddData.parentId" @change='changSelect'>
+                    <el-option
+                    v-for="(item,index) in parentList"
+                    :key="index"
+                    :label="item.itemName"
+                    :value="item.id">
+                    <span style="float: left">{{ item.itemName }}</span>
+                    <!-- <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span> -->
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="排序" :label-width="formLabelWidth" prop="rank">
+            <el-input v-model="AddData.rank" placeholder="请输入内容" autocomplete="off"></el-input>
+            <el-alert style="padding:0px" title="注：越大代表排序越靠后" type="success"></el-alert>
+        </el-form-item>
+        <el-form-item label="图片" :label-width="formLabelWidth" prop="itemImg">
+            <div class="avatar-uploader" @click="UpLoadShow(3,1,1)">
+                <img v-if="AddData.itemImg" :src="AddData.itemImg" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </div>
+        </el-form-item>
+        <el-form-item label="排序" :label-width="formLabelWidth" prop="itemDeclare">
+            <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="AddData.itemDeclare"></el-input>
+        </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+        <el-button @click="AddShow = false">取 消</el-button>
+        <el-button type="primary" @click="addData">确 定</el-button>
+    </div>
 </el-dialog>
     <!--商品分类编辑-->
+
     <!-- <Uploadimg ref='UploadImg' @GetDataImg='GetDataImg' :type='ImgType' :proportion='proportion'/> -->
     <!--图片上传 end-->
+    </div>
 </template>
 <script>
-// import API from "@/api/goods";
+ import {UpdataList} from "@/api/kind";
 // import Uploadimg from "@/components/UpLoadImg/UpLoadImg";
 export default {
     components:{},
     data () {
         return {
-           EditShow:false,
+           AddShow:false,
            ImgType:0, //设置图片类型
            proportion:1, //设置图片比例
            IMAGE_iNDEX:1, //是删除还是编辑的标识
-           EdiData:{
-            parentId:'',
-            root:'2',
-            img:''
+           parentList:[],
+           AddData:{
+             parentId:'',
+             parentName:'',
+             isRoot:'0',
+             itemImg:'1111'
            },
            formLabelWidth:'120px',
-           EdiDatarules:{
-             name:[
-                { required: true, message: '等级名称', trigger: 'blur' },
+           AddDatarules:{
+             itemName:[
+                { required: true, message: '分类名称', trigger: 'blur' },
              ],
-             root:[
+             isRoot:[
                 { required: true, message: '请设置根级', trigger: 'blur' },
              ],
              parentId:[
                 { required: true, message: '请设置父级', trigger: 'blur' },
              ],
-             sort:[
+             parentName:[
+                { required: true, message: '请设置父级', trigger: 'blur' },
+             ],
+             rank:[
                 { required: true, message: '请设置排序', trigger: 'blur' },
              ],
-             showed:[
-                { required: true, message: '请设置是否展示', trigger: 'blur' },
-             ],
-             img:[
+             itemImg:[
                 { required: true, message: '请设置分类图片', trigger: 'blur' },
              ],
            }
         }
     },
     methods: {
-        //编辑用户等级EditruleForm
-        editData(){
-            // let that = this;
-            // this.$refs['EditruleForm'].validate((valid) => {
-            // if (valid) {
-            //     API.UpdataGoodsCat(that.EdiData).then(res => {
-            //         if(res.code == 0){
-            //             that.$message({message:'编辑成功',type:'success'})
-            //             that.$parent.GetGoodsCatList();
-            //             that.EditShow = false;
-            //         }else{
-            //             that.$message.error('添加失败');                    
-            //         }
-            //     }).catch(err => {})
-            // } else {
-            //     console.log('error submit!!');
-            //     return false;
-            // }
-            // });            
+        //添加用户的等级
+        addData(){
+            let that = this;
+            this.$refs['AddruleForm'].validate((valid) => {
+            if (valid) {
+                UpdataList(that.AddData).then(res => {
+                    if(res == ''){
+                        that.$message({ message: '成功', type: 'success'});
+                        that.$parent.GetDataLits();
+                        that.AddShow = false
+                    }else{
+                    that.$message.error('失败');
+                    }
+                }).catch(err => {})
+            } else {
+                console.log('error submit!!');
+                return false;
+            }
+            });
         },
-        //编辑选择父级
-        EditchangeRadio(){
-            this.EdiData.root == 1 ? this.EdiData.parentId = '0' : this.EdiData.parentId = ''           },
-        //编辑显示
-        EditDiaLogShow(val,row){
-            this.EditShow = val;
-            row.root = row.root+''
-            row.parentId = row.parentId*1
-            row.showed = row.showed+''
-            this.EdiData = Object.assign({},row);
+
+        //父级名称赋值
+        changSelect(e){
+            let that = this;
+            that.AddData.parentName = this.parentList.find(Fres => Fres.id == e).itemName
         },
+        
+
+        //选择父级
+        changeRadio(){
+            this.AddData.isRoot == 0 ? this.AddData.parentId = '0' : this.AddData.parentId = ''
+        },
+
+        //添加显示
+        EditDiaLogShow(val,row,list){
+            this.AddShow = val;
+            this.AddData = Object.assign({},row)
+            this.AddData.isRoot = this.AddData.isRoot + ''
+            this.parentList = list;
+            console.log("zhesh", this.AddData)
+        },
+
         //显示图片上传框 type:上传图片的类型 proportion:上传图片的比例 IMAGE_iNDEX:是删除还是编辑的标识
         UpLoadShow(type,proportion,IMAGE_iNDEX){
             this.ImgType = type;
@@ -121,8 +139,8 @@ export default {
         },
 
         //图片赋值
-        GetDataImg(ImgUrl){  
-          this.EdiData.img = ImgUrl;  
+        GetDataImg(ImgUrl){    
+          this.AddData.img = ImgUrl;     
         },
     }
 }
@@ -145,6 +163,3 @@ export default {
     text-align: center;
 }
 </style>
-
-
-

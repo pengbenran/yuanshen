@@ -39,7 +39,7 @@
 
 <script>
 // import API from '@/api/goods'
- import {GetList} from "@/api/kind";
+ import {GetList,DeleteList} from "@/api/kind";
 import GoodsCatAddDialog from './component/GoodsCatAddDialog'
 import GoodsCatEditDialog from './component/GoodsCatEditDialog'
 // import Pagination from '@/components/Pagination'
@@ -97,8 +97,8 @@ import GoodsCatEditDialog from './component/GoodsCatEditDialog'
         that.loading = true;
         this.$confirm('此操作将永久删除该条数据, 是否继续?', '提示', {confirmButtonText: '确定',cancelButtonText: '取消', type: 'warning'
         }).then(() => {
-            API.DeleteGoodsCat({catId:row.catId}).then(res => {
-              if(res.code == 0){
+            DeleteList(row).then(res => {
+              if(res==''){
                   this.$message({ message: '删除成功', type: 'success'});
                   that.GetDataLits();
               }else{
@@ -114,6 +114,8 @@ import GoodsCatEditDialog from './component/GoodsCatEditDialog'
           that.loading = false;  
         });
       },
+
+
 
       //获取分类数据
       GetDataLits(){ 
@@ -139,7 +141,7 @@ import GoodsCatEditDialog from './component/GoodsCatEditDialog'
       //编辑数据 index下标、row指定当前条数据
       handlEdit(index,row){
         let that = this;
-        this.$refs.GoodsCatEditDialog.EditDiaLogShow(true,row)
+        this.$refs.GoodsCatEditDialog.EditDiaLogShow(true,row,that.GoodsCatList)
       }   
     }
   }
