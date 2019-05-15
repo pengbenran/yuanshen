@@ -9,11 +9,11 @@
           <el-table-column align="center"  prop="itemName" label="分类名称"></el-table-column>
           <el-table-column align="center"  prop="isRoot" label="是否为根级">
             <template slot-scope="scope">
-                <el-tag :type="scope.row.isRoot == 1 ? 'error' : 'success' ">{{ scope.row.isRoot == 1 ? '否' : '是' }}</el-tag>
+                <el-tag :type="scope.row.isRoot == 1 ? 'error' : 'success' ">{{ scope.row.isRoot == 2? '否' : '是' }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column align="center"  prop="itemImg" label="分类图片">
-             <template slot-scope="scope">
+             <template slot-scope="scope" v-if="scope.row.isRoot == 1">
                 <img :src="scope.row.itemImg" :alt="scope.row.itemName" width="60">
              </template>
           </el-table-column>
@@ -24,7 +24,7 @@
           </el-table-column>
           <el-table-column align="center" label="操作" width="200" class-name="small-padding fixed-width">
              <template slot-scope="scope">
-                <el-button type="primary" size="mini" @click="handlEdit(scope.$index,scope.row)">编辑</el-button>
+                <el-button type="primary" size="mini" @click="handlEdit(scope.row)">编辑</el-button>
                 <el-button type="danger" size="mini" @click="handleDelete(scope.$index,scope.row)">删除</el-button>
              </template>
           </el-table-column>
@@ -32,19 +32,21 @@
       </el-col>
     </el-row>
 
-    <GoodsCatAddDialog ref="GoodsCatAddDialog" />
-    <GoodsCatEditDialog ref="GoodsCatEditDialog"/>
+    <GoodsCatAddDialog ref="GoodsCatAddDialog" @ImgClick="ImgClick" @GetDataLits="GetDataLits" :addFrom='addFrom'/>
+    <GoodsCatEditDialog ref="GoodsCatEditDialog" @ImgClick="ImgClick" @GetDataLits="GetDataLits" :editFrom='editFrom'/>
+    <!-- 图片裁剪 -->
+    <uploadImg :proportion="proportion" ref='UploadImg' @GetDataImg='GetDataImg'></uploadImg>
   </div>
 </template>
 
 <script>
-// import API from '@/api/goods'
- import {GetList,DeleteList} from "@/api/kind";
+ import uploadImg from '@/components/UpLoadImg/UpLoadImg'
+ import {GetList,DeleteList,GetRootList} from "@/api/kind";
 import GoodsCatAddDialog from './component/GoodsCatAddDialog'
 import GoodsCatEditDialog from './component/GoodsCatEditDialog'
 // import Pagination from '@/components/Pagination'
   export default {
-    components: {GoodsCatAddDialog,GoodsCatEditDialog},
+    components: {GoodsCatAddDialog,GoodsCatEditDialog,uploadImg},
     data () {
       return {
         loading:false,
@@ -54,16 +56,36 @@ import GoodsCatEditDialog from './component/GoodsCatEditDialog'
           page: 1,
           limit: 10,
         },
-        total:10,
-        tagarr:[],
+        editFrom:{},
+        addFrom:{
+         parentId:'',
+         parentName:'',
+         isRoot:'1',
+         itemImg:'',
+         itemName:'',
+         rank:0,
+         itemDeclare:''
+       },
+       proportion:0.579,
+       total:10,
+       tagarr:[],
+       rootList:[]
       }
     },
     mounted () {
         this.GetDataLits();
+        this.getRootList()
     },
     methods: {
-
-
+      GetDataImg(ImgUrl){
+        let that=this
+        this.addFrom.itemImg=ImgUrl
+        this.editFrom.itemImg = ImgUrl
+      },
+       ImgClick(){
+        let that=this
+        that.$refs.UploadImg.showDialog(true)
+      } , 
 
       //删除数据
       handleDelete(index,row){
@@ -104,17 +126,28 @@ import GoodsCatEditDialog from './component/GoodsCatEditDialog'
               that.$message.error('失败');
           })
       },
+      // 获取根分类
+      getRootList(){
+        let that=this
+        GetRootList().then(function(res){
+          that.rootList=res
+        })
+      },
+
+
 
       //添加商品分类
       AddGoodsCat(){
         let that = this;
-        this.$refs.GoodsCatAddDialog.DiaLogShow(true,that.GoodsCatList)
+        that.$refs.GoodsCatAddDialog.DiaLogShow(that.rootList)
       },
       
       //编辑数据 index下标、row指定当前条数据
-      handlEdit(index,row){
+      handlEdit(row){
         let that = this;
-        this.$refs.GoodsCatEditDialog.EditDiaLogShow(true,row,that.GoodsCatList)
+        that.editFrom=row
+        console.log(that.rootList);
+        this.$refs.GoodsCatEditDialog.EditDiaLogShow(that.rootList)
       }   
     }
   }

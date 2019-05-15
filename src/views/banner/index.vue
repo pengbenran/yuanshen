@@ -33,7 +33,7 @@
       <!-- 编辑界面 -->
       <bannerEditDialog :editFrom='editFrom' ref="bannerEditDialog" @ImgClick="ImgClick" @getBannerList="getBannerList"></bannerEditDialog>
       <!-- 图片裁剪 -->
-      <uploadImg :proportion="proportion" :type="type" ref='UploadImg' @GetDataImg='GetDataImg'></uploadImg>
+      <uploadImg :proportion="proportion" ref='UploadImg' @GetDataImg='GetDataImg'></uploadImg>
     </el-col>
   </el-row>
   </div>
@@ -54,7 +54,7 @@
           title:'',
           rank:'0',
         },
-        proportion:2.8,
+        proportion:2.14,
         type:2,
         btnLoading:false,
       }

@@ -8,7 +8,7 @@
           <el-col width='400' v-else>
             <img :src="addFrom.imgUrl" mode='widthFix' style="width:100%"  @click="ImgClick">
           </el-col>
-          <el-alert title="注：首页banner比例为2.8 : 1，建议图片大小为300kb - 400kb" type="error" style="padding:0;margin-top: 5px;"></el-alert>
+          <el-alert title="注：首页banner比例为2.14 : 1，建议图片大小为300kb - 400kb" type="error" style="padding:0;margin-top: 5px;"></el-alert>
           </el-form-item>
           <el-form-item label="banner标题" :label-width="formLabelWidth" >
             <div class="inputGoods">
