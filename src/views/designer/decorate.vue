@@ -80,14 +80,14 @@
         this.$confirm('此操作将永久删除该条数据, 是否继续?', '提示', {confirmButtonText: '确定',cancelButtonText: '取消', type: 'warning'
         }).then(() => {
          params.id=id
-         desiginerDelete(params).then(function(res){
+         decorateDelete(params).then(function(res){
           if(res==""){
             that.$message.success({
               showClose: true,
               message: "删除成功",
               duration: 2000
             }); 
-            that.getDesignerList()
+            that.getDecorateList()
           }
         })
         })  
@@ -95,12 +95,12 @@
       //编辑
       jumpEdit(id,row){
         let that = this;
-        that.$router.push({ path: 'decorate/decorateEdit',query:{id:id,row:row} })
+        that.$router.push({ path: '/decorate/decorateEdit',query:row })
       },
       // 新增
       jumpDesignerAdd(){
         let that = this;
-        that.$router.push({ path: 'decorate/decorateAdd' })
+        that.$router.push({ path: '/decorate/decorateAdd' })
       } 
     }
   }

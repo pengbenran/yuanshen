@@ -64,7 +64,7 @@ export default {
     let that=this
     adornAdd(that.designerDto).then(function(res){
         if(res==''){
-          that.$router.push({path:'decorate'})
+          that.$router.push({path:'/decorate'})
         }
       })
    },

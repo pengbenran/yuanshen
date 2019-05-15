@@ -119,40 +119,40 @@ export const constantRoutes = [
       },
       // 装饰中心
        {
-        path: 'decorate',
+        path: '/decorate',
         name: 'Decorate',
         component: () => import('@/views/designer/decorate'),
         meta: { title: '装饰中心',}
       },
         {
-        path: 'decorate/decorateAdd',
+        path: '/decorate/decorateAdd',
         component: () => import('@/views/designer/decorate/decorateAdd'),
         meta: { title: '装饰设计新增' },
         hidden:true
       },
       {
-        path: 'decorate/decorateEdit',
+        path: '/decorate/decorateEdit',
         component: () => import('@/views/designer/decorate/decorateEdit'),
         meta: { title: '装饰设计编辑' },
         hidden:true
       },
       // 产品中心
        {
-        path: 'product',
+        path: '/product',
         name: 'Product',
         component: () => import('@/views/designer/product'),
         meta: { title: '产品中心', }
       },
         {
-        path: 'product/productAdd',
+        path: '/product/productAdd',
         component: () => import('@/views/designer/product/productAdd'),
-        meta: { title: '装饰设计新增' },
+        meta: { title: '产品中心新增' },
         hidden:true
       },
       {
-        path: 'product/productEdit',
+        path: '/product/productEdit',
         component: () => import('@/views/designer/product/productEdit'),
-        meta: { title: '装饰设计编辑' },
+        meta: { title: '产品中心编辑' },
         hidden:true
       },  
     ]
