@@ -18,7 +18,7 @@
       <div class="avatar-uploader"   @click="UpLoadShow(1)"><img v-if="designerDto.photo" :src="designerDto.photo" class="avatar"><i v-else class="el-icon-plus avatar-uploader-icon"></i></div>
     </el-form-item>
     <el-form-item label="设计师作品集" :label-width="formLabelWidth"  prop="images">
-      <div class="avatar-uploader imagesBoxList" v-for="(item,index) in designerDto.imgReels" :key="item" :index='index' @click="UpLoadShow(2,index)">
+      <div class="avatar-uploader imagesBoxList" v-for="(item,index) in imgReels" :key="item" :index='index' @click="UpLoadShow(2,index)">
         <img :src="item" class="boxImg">
       </div>
       <div class="avatar-uploader imagesBoxList"  @click="UpLoadShow(2,0)">
@@ -51,7 +51,10 @@ export default {
       formLabelWidth:'120px'
     }
   },
-  components:{Editor,Uploadimg},
+  computed:{
+  
+  },
+  components:{Uploadimg},
   methods: {
    UpLoadShow(type,index){
     let that=this
@@ -63,7 +66,6 @@ export default {
    submit(){
     let that=this
     desiginerAdd(that.designerDto).then(function(res){
-      console.log('ressult',res=='')
       if(res==''){
         that.$router.push({path:'index'})
       }
@@ -80,8 +82,13 @@ export default {
         that.designerDto.photo=ImgUrl
       }
       else{
-        that.designerDto.imgReels[that.selectIndex]=ImgUrl
-      }    
+        if(that.selectIndex==0){
+          that.designerDto.imgReels.push(ImgUrl)
+        }
+        else{
+          that.designerDto.imgReels[that.selectIndex]=ImgUrl
+        }  
+      }  
     }
   }
 }

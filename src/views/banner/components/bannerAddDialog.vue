@@ -2,7 +2,7 @@
  <el-dialog title="首页banner新增" :visible.sync="addFormVisible">
         <el-form :model="addFrom" ref="advertform">
           <el-form-item label="图片路径" :label-width="formLabelWidth">
-           <el-col width='400' v-if="addFrom.url==''">
+           <el-col width='400' v-if="addFrom.imgUrl==''">
             <i class="el-icon-plus avatar-uploader-icon" @click="ImgClick"></i>
           </el-col>
           <el-col width='400' v-else>
@@ -12,7 +12,7 @@
           </el-form-item>
           <el-form-item label="banner标题" :label-width="formLabelWidth" >
             <div class="inputGoods">
-              <el-input v-model="addFrom.title"  autocomplete="off" placeholder="请输入排列顺序"></el-input>
+              <el-input v-model="addFrom.title"  autocomplete="off" placeholder="请输入banner标题"></el-input>
             </div>
           </el-form-item> 
         </el-form>
@@ -20,6 +20,7 @@
           <el-button @click.native="addFormVisible = false">取 消</el-button>
           <el-button type="primary" @click="submit">确 定</el-button>
         </div>
+      </div>
       </el-dialog>
 </template>
 <script type="text/javascript">
@@ -50,7 +51,7 @@
             duration: 2000
           });
           that.addFormVisible = false;
-          that.$emit('getHomeBanner');
+          that.$emit('getBannerList');
           }
           else{
              that.$message.error({

@@ -14,30 +14,26 @@
       <el-table :data="bannerList" highlight-current-row style="width: 100%;">
         <el-table-column label="编号" prop="id">
         </el-table-column>
-        <el-table-column prop="sorts" label="排序">
+        <el-table-column prop="title" label="banner标题">
         </el-table-column>
         <el-table-column  label="banner图片"  width="300">
           <template slot-scope="scope">
-            <img  :src="scope.row.url" width="200" style="margin-left: 8px">
+            <img  :src="scope.row.imgUrl" width="200" style="margin-left: 8px">
           </template>
-        </el-table-column>
-        <el-table-column prop="status" label="是否关联商品">
-        </el-table-column>
-        <el-table-column prop="goodId" label="关联商品ID">
         </el-table-column>
         <el-table-column label="操作" :width="200">
           <template slot-scope="scope">
             <el-button size="mini" @click="showEditDialog(scope.$index,scope.row)">编辑</el-button>
-            <el-button size="mini" type="danger" @click="removeMemberLevel(scope.$index,scope.row)">删除</el-button>
+            <el-button size="mini" type="danger" @click="bannerDele(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
       <!-- 添加界面 -->
-      <bannerAddDialog :addFrom='addFrom' ref="bannerAddDialog" @ImgClick="ImgClick"></bannerAddDialog>
+      <bannerAddDialog :addFrom='addFrom' ref="bannerAddDialog" @ImgClick="ImgClick"  @getBannerList="getBannerList"></bannerAddDialog>
       <!-- 编辑界面 -->
-      <bannerEditDialog :editFrom='editFrom' ref="bannerEditDialog" @ImgClick="ImgClick"></bannerEditDialog>
+      <bannerEditDialog :editFrom='editFrom' ref="bannerEditDialog" @ImgClick="ImgClick" @getBannerList="getBannerList"></bannerEditDialog>
       <!-- 图片裁剪 -->
-      <!-- <uploadImg :proportion="proportion" :type="type" ref='UploadImg' @GetDataImg='GetDataImg'></uploadImg> -->
+      <uploadImg :proportion="proportion" :type="type" ref='UploadImg' @GetDataImg='GetDataImg'></uploadImg>
     </el-col>
   </el-row>
   </div>
@@ -46,15 +42,15 @@
 <script>
   import bannerEditDialog from './components/bannerEditDialog'
   import bannerAddDialog from './components/bannerAddDialog'
-  // import uploadImg from '@/components/UpLoadImg/UpLoadImg'
-  import {bannerList} from '@/api/banner'
+  import uploadImg from '@/components/UpLoadImg/UpLoadImg'
+  import {bannerList,bannerDele} from '@/api/banner'
   export default {
     data () {
       return {
         bannerList:[],
         editFrom:{},
         addFrom:{
-          imgUrl:'http://23232323',
+          imgUrl:'',
           title:'',
           rank:'0',
         },
@@ -67,7 +63,7 @@
       let that=this
       that.getBannerList()
     },
-    components: { bannerEditDialog,bannerAddDialog},
+    components: { bannerEditDialog,bannerAddDialog,uploadImg},
     methods: {
       // 获取首页banner
       getBannerList(){
@@ -76,24 +72,29 @@
         params.pageIndex=0
         params.pageSize=10
         bannerList(params).then(function(res){
-          console.log(res)
-          // that.bannerList=res.rows
+          that.bannerList=res
         })
       },
       // 删除首页banner
-      // removeMemberLevel(index,row){
-      //   let that=this
-      //   Api_adv.HomeBannerDel(row).then(function(res){
-      //     if(res.code==0){
-      //       that.$message.success({
-      //         showClose: true,
-      //         message: "删除成功",
-      //         duration: 2000
-      //       }); 
-      //       that.getHomeBanner()
-      //     }
-      //   })
-      // },
+      bannerDele(id){
+        let that=this
+        this.$confirm('此操作将永久删除该条数据, 是否继续?', '提示', {confirmButtonText: '确定',cancelButtonText: '取消', type: 'warning'
+      }).then(() => {
+        let params={}
+        params.id=id
+        bannerDele(params).then(function(res){
+          if(res==''){
+            that.$message.success({
+              showClose: true,
+              message: "删除成功",
+              duration: 2000
+            }); 
+            that.getBannerList()
+          }
+        })
+      })
+        
+      },
       //编辑
       showEditDialog(index,row){
         let that = this;
@@ -107,8 +108,8 @@
       },
       GetDataImg(ImgUrl){
         let that=this
-        this.addFrom.url=ImgUrl
-        this.editFrom.url = ImgUrl
+        this.addFrom.imgUrl=ImgUrl
+        this.editFrom.imgUrl = ImgUrl
       },
       ImgClick(){
         let that=this

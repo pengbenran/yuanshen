@@ -3,24 +3,13 @@
 		<el-form :model="editFrom" ref="advertform">
 			<el-form-item label="图片路径" :label-width="formLabelWidth">
 				<el-col width='400'>
-					<img :src="editFrom.url" mode='widthFix' style="width:100%"  @click="ImgClick">
+					<img :src="editFrom.imgUrl" mode='widthFix' style="width:100%"  @click="ImgClick">
 				</el-col>
 				<el-alert title="注：首页banner比例为2.8 : 1，建议图片大小为300kb - 400kb" type="error" style="padding:0;margin-top: 5px;"></el-alert>
 			</el-form-item>
-			<el-form-item label="是否关联商品" :label-width="formLabelWidth" prop="isconnect">
-				<el-radio-group v-model="editFrom.status">
-					<el-radio :label="1">是</el-radio>
-					<el-radio :label="0">否</el-radio>
-				</el-radio-group>
-			</el-form-item>
-			<el-form-item label="关联商品Id" :label-width="formLabelWidth" prop="goodId" v-if="editFrom.status == 1" >
-				<div class="inputGoods">
-					<el-input v-model="editFrom.goodId" autocomplete="off"></el-input>
-				</div>
-			</el-form-item> 
-			<el-form-item label="排序" :label-width="formLabelWidth" >
+			<el-form-item label="banner标题" :label-width="formLabelWidth" >
             <div class="inputGoods">
-              <el-input v-model="editFrom.sorts"  autocomplete="off" placeholder="请输入排列顺序"></el-input>
+              <el-input v-model="editFrom.title"  autocomplete="off" placeholder="请输入banner标题"></el-input>
             </div>
           </el-form-item> 
 		</el-form>
@@ -31,7 +20,7 @@
 	</el-dialog>
 </template>
 <script type="text/javascript">
-	// import Api_adv from '@/api/adv'
+	import {bannerUpdate} from '@/api/banner'
 	export default {
 		props: ['editFrom'],
 		data () {
@@ -50,15 +39,15 @@
           },
           upData(){
           	let that=this
-          	Api_adv.HomeBannerUpdate(that.editFrom).then(function(res){
-          		if(res.code==0){
+          	bannerUpdate(that.editFrom).then(function(res){
+          		if(res==''){
           			that.$message.success({
           				showClose: true,
           				message: "更新成功",
           				duration: 2000
           			});	
           			that.dialogFormVisible = false;
-          			that.$emit('getHomeBanner');
+          			that.$emit('getBannerList');
           		}
           		else{
           			that.$message.error({

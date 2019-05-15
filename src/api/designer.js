@@ -17,11 +17,26 @@ export function desiginerDetail(params) {
 }
 
 // 设计师列表
-
 export function desiginerList(params) {
   return request({
     url: '/project/product/designer/queryList',
     method: 'get',
+    params
+  })
+}
+// 设计师编辑
+export function desiginerUpdate(params) {
+  return request({
+    url: '/project/product/designer',
+    method: 'PUT',
+    data:params
+  })
+}
+// 设计师删除
+export function desiginerDelete(params) {
+  return request({
+    url: '/project/product/designer',
+    method: 'DELETE',
     params
   })
 }

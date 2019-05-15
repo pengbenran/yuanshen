@@ -15,3 +15,19 @@ export function bannerList(params) {
     params
   })
 }
+// banner修改
+export function bannerUpdate(params) {
+  return request({
+    url: '/project/other/banner',
+    method: 'PUT',
+    data:params
+  })
+}
+// banner删除
+export function bannerDele(params) {
+  return request({
+    url: '/project/other/banner',
+    method: 'DELETE',
+    params
+  })
+}

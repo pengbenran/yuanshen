@@ -11,11 +11,14 @@
     <el-form-item label="设计师年龄" :label-width="formLabelWidth"  prop="age">
       <el-input v-model="designerDto.age" placeholder="请输入设计师年龄" autocomplete="off"></el-input>
     </el-form-item>
-    <el-form-item label="设计师头像" :label-width="formLabelWidth"  prop="introduce">
-      <div class="avatar-uploader"   @click="UpLoadShow(1)"><img v-if="designerDto.introduce" :src="designerDto.introduce" class="avatar"><i v-else class="el-icon-plus avatar-uploader-icon"></i></div>
+     <el-form-item label="设计师简介" :label-width="formLabelWidth"  prop="age">
+      <el-input v-model="designerDto.introduce" placeholder="请输入设计师年龄" autocomplete="off"></el-input>
+    </el-form-item>
+    <el-form-item label="设计师头像" :label-width="formLabelWidth"  prop="photo">
+      <div class="avatar-uploader"   @click="UpLoadShow(1)"><img v-if="designerDto.photo" :src="designerDto.photo" class="avatar"><i v-else class="el-icon-plus avatar-uploader-icon"></i></div>
     </el-form-item>
     <el-form-item label="设计师作品集" :label-width="formLabelWidth"  prop="images">
-      <div class="avatar-uploader imagesBoxList" v-for="(item,index) in designerDto.imagesList" :key="item" :index='index' @click="UpLoadShow(2,index)">
+      <div class="avatar-uploader imagesBoxList" v-for="(item,index) in designerDto.imgReels" :key="item" :index='index' @click="UpLoadShow(2,index)">
         <img :src="item" class="boxImg">
       </div>
       <div class="avatar-uploader imagesBoxList"  @click="UpLoadShow(2,0)">
@@ -33,13 +36,12 @@
 <script>
 import Editor from "@/components/Editor/Editor";
 import Uploadimg from "@/components/UpLoadImg/UpLoadImg";
-import {desiginerDetail} from "@/api/designer"
+import {desiginerDetail,desiginerUpdate} from "@/api/designer"
 export default {
   data() {
     return { 
       designerDto: {
-        introduce:'',
-       imagesList:[]
+       
       },
       selectType:'',
       selectIndex:'',
@@ -48,6 +50,10 @@ export default {
     }
   },
   components:{Editor,Uploadimg},
+  mounted(){
+    let that=this
+    that.getDesiginerDetail(this.$route.query.id)
+  },
   methods: {
    UpLoadShow(type,index){
     let that=this
@@ -56,18 +62,21 @@ export default {
     that.$refs.UploadImg.showDialog(true)
    },
    // 设计师详情
-   getDesiginerDetail(){
+   getDesiginerDetail(id){
+    let that=this
     let params={}
-    params.id=1
+    params.id=id
     desiginerDetail(params).then(function(res){
-      console.log(res);
+      that.designerDto=res
     })
    },
    // 设计师新增
    submit(){
     let that=this
-    desiginerAdd(that.designerDto).then(function(res){
-        console.log(res)
+    desiginerUpdate(that.designerDto).then(function(res){
+        if(res==''){
+          that.$router.push({path:'index'})
+        }
       })
    },
     //图片返回赋值
