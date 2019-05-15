@@ -99,7 +99,19 @@ export const constantRoutes = [
         name: 'Designer',
         component: () => import('@/views/designer/index'),
         meta: { title: '设计师管理', icon: 'dashboard' }
-      }
+      },
+      {
+        path: 'designerAdd',
+        component: () => import('@/views/designer/designerAdd'),
+        meta: { title: '设计师新增' },
+        hidden:true
+      },
+      {
+        path: 'designerEdit',
+        component: () => import('@/views/designer/designerEdit'),
+        meta: { title: '设计师编辑' },
+        hidden:true
+      },
     ]
   },
   {

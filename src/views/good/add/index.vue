@@ -44,8 +44,7 @@
       <div class="avatar-uploader imagesBoxList" >
         <i class="el-icon-plus avatar-uploader-icon boxImg"></i>
       </div>
-    </el-form-item>   
-      
+    </el-form-item>      
   </el-form>
   <div slot="footer" class="dialog-footer">
     <el-button >取 消</el-button>

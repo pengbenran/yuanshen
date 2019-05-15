@@ -58,7 +58,7 @@
 <script>
   import $ from 'jquery'
   import 'cropper/dist/cropper.js'
-  // import Api_img from "@/api/api_lib"
+  import {imageUpload} from "@/api/imgUpLoad"
   export default {
 
     props:{
@@ -310,7 +310,7 @@
         data.append('file',imgFile)      
         data.append('type',this.type)
         if(imgFile.size/1024 < 650){
-          Api_img.imageUpload(data).catch(err => {
+          imageUpload(data).catch(err => {
             this.$notify.error({
               title:'上传失败',
               message:'上传失败请重新上传'

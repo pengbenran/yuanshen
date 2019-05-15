@@ -47,37 +47,16 @@
   import bannerEditDialog from './components/bannerEditDialog'
   import bannerAddDialog from './components/bannerAddDialog'
   // import uploadImg from '@/components/UpLoadImg/UpLoadImg'
-  // import Api_adv from '@/api/adv'
+  import {bannerList} from '@/api/banner'
   export default {
     data () {
       return {
-        bannerList:[
-        {createDate: "2019-04-13 15:19:13",
-        goodId: null,
-        id: 203,
-        sorts: null,
-        status: 1,
-        type: 1,
-        url: "https://1875.etuetf.com/banner/40730b86-c072-4e7c-a963-a37304b45f8d.jpg"},{createDate: "2019-04-13 15:19:13",
-        goodId: null,
-        id: 203,
-        sorts: null,
-        status: 1,
-        type: 1,
-        url: "https://1875.etuetf.com/banner/40730b86-c072-4e7c-a963-a37304b45f8d.jpg"},{createDate: "2019-04-13 15:19:13",
-        goodId: null,
-        id: 203,
-        sorts: null,
-        status: 1,
-        type: 1,
-        url: "https://1875.etuetf.com/banner/40730b86-c072-4e7c-a963-a37304b45f8d.jpg"}],
+        bannerList:[],
         editFrom:{},
         addFrom:{
-          goodId:'',
-          type:1,
-          url:'',
-          status:1,
-          sorts:''
+          imgUrl:'http://23232323',
+          title:'',
+          rank:'0',
         },
         proportion:2.8,
         type:2,
@@ -86,20 +65,21 @@
     },
     mounted () {
       let that=this
-      // that.getHomeBanner()
+      that.getBannerList()
     },
     components: { bannerEditDialog,bannerAddDialog},
     methods: {
       // 获取首页banner
-      // getHomeBanner(){
-      //   let params={}
-      //   let that=this
-      //   that.addFrom={goodId:'',type:1,url:'',status:1,sorts:''}
-      //   params.type=1
-      //   Api_adv.HomeBannerList(params).then(function(res){
-      //     that.bannerList=res.rows
-      //   })
-      // },
+      getBannerList(){
+        let params={}
+        let that=this
+        params.pageIndex=0
+        params.pageSize=10
+        bannerList(params).then(function(res){
+          console.log(res)
+          // that.bannerList=res.rows
+        })
+      },
       // 删除首页banner
       // removeMemberLevel(index,row){
       //   let that=this

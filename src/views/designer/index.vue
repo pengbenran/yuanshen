@@ -6,7 +6,7 @@
       <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
         <el-form :inline="true">
           <el-form-item>
-            <el-button type="primary" @click="showAddDialog">新增</el-button>
+            <el-button type="primary" @click="jumpDesignerAdd">新增</el-button>
           </el-form-item>
         </el-form>
       </el-col>
@@ -30,20 +30,12 @@
           </template>
         </el-table-column>
       </el-table>
-       <!-- 添加界面 -->
-      <designerAddDialog :addFrom='addFrom' ref="designerAddDialog" @ImgClick="ImgClick"></designerAddDialog>
-      <!-- 编辑界面 -->
-      <designerEditDialog :editFrom='editFrom' ref="designerEditDialog" @ImgClick="ImgClick"></designerEditDialog>
-      <!-- 图片裁剪 -->
-      <!-- <uploadImg :proportion="proportion" :type="type" ref='UploadImg' @GetDataImg='GetDataImg'></uploadImg> -->
     </el-col>
   </el-row>
   </div>
 </template>
 
 <script>
-  import designerAddDialog from './components/designerAddDialog'
-  import designerEditDialog from './components/designerEditDialog'
   export default {
     data () {
       return {
@@ -88,7 +80,7 @@
     mounted () {
       let that=this
     },
-    components: { designerEditDialog,designerAddDialog},
+    components: {},
     methods: { 
       // 删除首页banner
       removeMemberLevel(index,row){
@@ -101,9 +93,9 @@
         that.$refs.designerEditDialog.showEditDialog()
       },
       // 新增
-      showAddDialog(){
+      jumpDesignerAdd(){
         let that = this;
-        that.$refs.designerAddDialog.showAddDialog()
+        that.$router.push({ path: 'designerAdd' })
       },
       GetDataImg(ImgUrl){
         let that=this

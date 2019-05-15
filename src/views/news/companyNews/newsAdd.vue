@@ -8,6 +8,9 @@
       <Editor ref="Editor"/>
     </el-form-item> 
   </el-form>
+   <div slot="footer" class="dialog-footer">
+    <el-button type="primary" @click="submit">确定</el-button>
+  </div>
   </div>
 </template>
 

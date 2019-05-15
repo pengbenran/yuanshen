@@ -48,9 +48,9 @@ export default {
          //返回data
         this.showCropper = false;
         this.loading = false;
-        if(data.code == 0){
-          this.$emit('GetDataImg',data.url)
-        }
+        
+        this.$emit('GetDataImg',data)
+        
       },
       
       //隐藏

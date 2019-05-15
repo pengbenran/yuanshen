@@ -6,24 +6,13 @@
             <i class="el-icon-plus avatar-uploader-icon" @click="ImgClick"></i>
           </el-col>
           <el-col width='400' v-else>
-            <img :src="addFrom.url" mode='widthFix' style="width:100%"  @click="ImgClick">
+            <img :src="addFrom.imgUrl" mode='widthFix' style="width:100%"  @click="ImgClick">
           </el-col>
           <el-alert title="注：首页banner比例为2.8 : 1，建议图片大小为300kb - 400kb" type="error" style="padding:0;margin-top: 5px;"></el-alert>
           </el-form-item>
-          <el-form-item label="是否关联商品" :label-width="formLabelWidth" prop="isconnect">
-            <el-radio-group v-model="addFrom.status">
-              <el-radio :label="1">是</el-radio>
-              <el-radio :label="2">否</el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="关联商品Id" :label-width="formLabelWidth" prop="goodId" v-if="addFrom.status == 1" >
+          <el-form-item label="banner标题" :label-width="formLabelWidth" >
             <div class="inputGoods">
-              <el-input v-model="addFrom.goodId" autocomplete="off" placeholder="请输入商品ID" ></el-input>
-            </div>
-          </el-form-item> 
-          <el-form-item label="排序" :label-width="formLabelWidth" >
-            <div class="inputGoods">
-              <el-input v-model="addFrom.sorts"  autocomplete="off" placeholder="请输入排列顺序"></el-input>
+              <el-input v-model="addFrom.title"  autocomplete="off" placeholder="请输入排列顺序"></el-input>
             </div>
           </el-form-item> 
         </el-form>
@@ -34,7 +23,7 @@
       </el-dialog>
 </template>
 <script type="text/javascript">
-  // import Api_adv from '@/api/adv'
+  import {bannerAdd} from '@/api/banner'
 	export default {
 		props: ['addFrom'],
 		data () {
@@ -53,8 +42,8 @@
       },
       submit(){
         let that=this
-        Api_adv.HomeBannerSave(that.addFrom).then(function(res){
-          if(res.code==0){
+        bannerAdd(that.addFrom).then(function(res){
+          if(res==''){
            that.$message.success({
             showClose: true,
             message: "新增成功",
