@@ -23,7 +23,7 @@
         </el-table-column>
         <el-table-column label="操作" :width="200">
           <template slot-scope="scope">
-            <el-button size="mini" @click="jumpEdit(scope.row.id)">编辑</el-button>
+            <el-button size="mini" @click="jumpEdit(scope.row.id,scope.row)">编辑</el-button>
             <el-button size="mini" type="danger" @click="removeDesiginer(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
@@ -93,14 +93,14 @@
         })  
       },
       //编辑
-      jumpEdit(id){
+      jumpEdit(id,row){
         let that = this;
-        that.$router.push({ path: 'designer/designerEdit',query:{id:id} })
+        that.$router.push({ path: 'decorate/decorateEdit',query:{id:id,row:row} })
       },
       // 新增
       jumpDesignerAdd(){
         let that = this;
-        that.$router.push({ path: 'designer/designerAdd' })
+        that.$router.push({ path: 'decorate/decorateAdd' })
       } 
     }
   }

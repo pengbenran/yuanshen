@@ -40,3 +40,14 @@ export function desiginerDelete(params) {
     params
   })
 }
+
+
+//装饰新增
+
+export function adornAdd(params) {
+  return request({
+    url: '/project/design/adorn',
+    method: 'post',
+    data:params
+  })
+}

@@ -89,12 +89,20 @@ import {DeleteNew} from "@/api/new"
       //     }
       //   })
       // },
+
+    //获取新闻列表
+    GetNewsList(){
+      let that = this;
+
+    },
+
+    //删除新闻列表
      removeNews(index,row){
         let that = this;
         that.loading = true;
-        let data = {
-          ids:[row.id]
-        }
+        // let data = {
+        //   ids:[row.id]
+        // }
         this.$confirm('此操作将永久删除该条数据, 是否继续?', '提示', {confirmButtonText: '确定',cancelButtonText: '取消', type: 'warning'
         }).then(() => {
             DeleteNew(row).then(res => {
