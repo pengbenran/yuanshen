@@ -17,7 +17,7 @@ export function decorateDetail(params) {
 }
 
 // 产品设计列表
-export function decorateList(params) {
+export function productList(params) {
   return request({
     url: '/project/design/product/queryList',
     method: 'get',
