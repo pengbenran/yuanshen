@@ -6,13 +6,22 @@
       </el-col>
       <el-col :span="24" v-loading="loading"  element-loading-text="正在查询中。。。" >
         <el-table ref="multipleTable" :data="GoodsCatList" tooltip-effect="dark" style="width: 100%">
-          <el-table-column align="center"  prop="name" label="分类名称"></el-table-column>
-          <el-table-column align="center"  prop="root" label="是否为根级">
+          <el-table-column align="center"  prop="itemName" label="分类名称"></el-table-column>
+          <el-table-column align="center"  prop="isRoot" label="是否为根级">
             <template slot-scope="scope">
-                <el-tag :type="scope.row.root == 1 ? 'success' : 'error' ">{{ scope.row.root == 1 ? '是' : '否' }}</el-tag>
+                <el-tag :type="scope.row.isRoot == 1 ? 'error' : 'success' ">{{ scope.row.isRoot == 1 ? '否' : '是' }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column align="center"  prop="ParentName" label="父级Id" ></el-table-column>
+          <el-table-column align="center"  prop="itemImg" label="分类图片">
+             <template slot-scope="scope">
+                <img :src="scope.row.itemImg" :alt="scope.row.itemName" width="60">
+             </template>
+          </el-table-column>
+          <el-table-column align="center"  prop="parentName" label="父级Id" >
+             <template slot-scope="scope">
+                <el-tag type='success'>{{scope.row.parentName == null ? '根级' : scope.row.parentName}}</el-tag>
+             </template>
+          </el-table-column>
           <el-table-column align="center" label="操作" width="200" class-name="small-padding fixed-width">
              <template slot-scope="scope">
                 <el-button type="primary" size="mini" @click="handlEdit(scope.$index,scope.row)">编辑</el-button>
@@ -23,13 +32,14 @@
       </el-col>
     </el-row>
 
-    <GoodsCatAddDialog ref="GoodsCatAddDialog" :GoodsCatList='GoodsCatList'/>
+    <GoodsCatAddDialog ref="GoodsCatAddDialog" />
     <GoodsCatEditDialog ref="GoodsCatEditDialog"/>
   </div>
 </template>
 
 <script>
 // import API from '@/api/goods'
+ import {GetList,DeleteList} from "@/api/kind";
 import GoodsCatAddDialog from './component/GoodsCatAddDialog'
 import GoodsCatEditDialog from './component/GoodsCatEditDialog'
 // import Pagination from '@/components/Pagination'
@@ -75,42 +85,11 @@ import GoodsCatEditDialog from './component/GoodsCatEditDialog'
       }
     },
     mounted () {
-       // this.GetGoodsCatList();
+        this.GetDataLits();
     },
     methods: {
 
-      //获取所有的等级
-      // GetGoodsCatList(){
-      //   let that = this;
-      //   API.GetGoodsCat(Object.assign({},that.listQuery)).then(res => {
-      //     if(res != undefined){
-      //        that.GoodsCatList = res.rows.map(Mres => {
-      //          Mres.ParentName = res.rows.find(f => f.catId == Mres.parentId) == undefined ? "第一级" :  res.rows.find(f => f.catId == Mres.parentId).name
-      //          return Mres
-      //        })
-      //        that.total = res.total
-      //        that.TagArr();
-      //     }else{
-      //        that.$message.error('分类请求失败');
-      //     }
-      //   }).catch(err =>{})
-      // },
 
-      //处理级别
-      // TagArr(){
-      //   let that = this;
-      //   let arr = [];
-      //   that.GoodsCatList.map(res => {
-      //       that.tagarr.push(res.root);
-      //   })
-
-      //   this.tagarr = Array.from(new Set(this.tagarr)).map((res,index) => {
-      //     return {name : `第${index+1}级`,root : res}
-      //     // res.name = `第${index}级`
-      //     // res.root = res
-      //   })
-
-      // },
 
       //删除数据
       handleDelete(index,row){
@@ -118,10 +97,10 @@ import GoodsCatEditDialog from './component/GoodsCatEditDialog'
         that.loading = true;
         this.$confirm('此操作将永久删除该条数据, 是否继续?', '提示', {confirmButtonText: '确定',cancelButtonText: '取消', type: 'warning'
         }).then(() => {
-            API.DeleteGoodsCat({catId:row.catId}).then(res => {
-              if(res.code == 0){
+            DeleteList(row).then(res => {
+              if(res==''){
                   this.$message({ message: '删除成功', type: 'success'});
-                  that.GetGoodsCatList();
+                  that.GetDataLits();
               }else{
                   this.$message.error('删除失败');
               }
@@ -135,16 +114,34 @@ import GoodsCatEditDialog from './component/GoodsCatEditDialog'
           that.loading = false;  
         });
       },
+
+
+
+      //获取分类数据
+      GetDataLits(){ 
+          let that = this;
+          GetList().then(res =>{
+              console.log("拿到分类",res)
+              if(res != undefined){
+                that.GoodsCatList = res
+              }else{
+                that.$message.error('失败');
+              }
+          }).catch(err => {
+              that.$message.error('失败');
+          })
+      },
+
       //添加商品分类
       AddGoodsCat(){
         let that = this;
-        this.$refs.GoodsCatAddDialog.DiaLogShow(true)
+        this.$refs.GoodsCatAddDialog.DiaLogShow(true,that.GoodsCatList)
       },
       
       //编辑数据 index下标、row指定当前条数据
       handlEdit(index,row){
         let that = this;
-        this.$refs.GoodsCatEditDialog.EditDiaLogShow(true,row)
+        this.$refs.GoodsCatEditDialog.EditDiaLogShow(true,row,that.GoodsCatList)
       }   
     }
   }
