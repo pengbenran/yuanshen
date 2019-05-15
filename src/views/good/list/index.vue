@@ -6,16 +6,24 @@
       </el-col>
       <el-col :span="24" v-loading="loading"  element-loading-text="正在查询中。。。" >
         <el-table ref="multipleTable" :data="GoodsList" tooltip-effect="dark" style="width: 100%">
-          <el-table-column align="center" prop="sn"  label="商品编号"></el-table-column>
-          <el-table-column align="center" prop="goodName"  label="商品名称"></el-table-column> 
-          <el-table-column align="center" prop="thumbnail"  label="商品图片">
+          <el-table-column align="center" prop="id"  label="商品id"></el-table-column>
+          <el-table-column align="center" prop="name"  label="商品名称"></el-table-column> 
+          <el-table-column align="center" prop="imgUrls"  label="商品图片">
             <template slot-scope="scope">
-               <img :src="scope.row.thumbnail" width="80">
+               <img :src="scope.row.imgUrls[0]" width="80">
             </template>
           </el-table-column>  
           <el-table-column align="center" prop="price" label="价格" ></el-table-column>     
-          <el-table-column align="center" prop="catName" label="所属分类" ></el-table-column>   
-          <el-table-column align="center" prop="showSales" label="销量" ></el-table-column>
+          <el-table-column align="center" prop="sales" label="销量" ></el-table-column>   
+          <el-table-column align="center" prop="itemId" label="分类" ></el-table-column> 
+          <el-table-column align="center" prop="type" label="类型" ></el-table-column>   
+          <el-table-column align="center" prop="sales" label="销量" ></el-table-column>
+          <el-table-column align="center" prop="labels" label="标签" >
+              <template slot-scope="scope">
+                  <el-tag v-for="item in scope.row.labels">{{item}}</el-tag>
+              </template>
+          </el-table-column>          
+          <el-table-column align="center" prop="createTime" label="添加时间" ></el-table-column>
           <el-table-column  align="center" label="操作" width="220" class-name="small-padding fixed-width">
              <template slot-scope="scope">
                 <el-button type="primary" size="mini" @click="handlEdit(scope.$index,scope.row)">编辑</el-button>
@@ -32,26 +40,16 @@
 </template>
 
 <script>
-// import API from '@/api/goods'
-// import Pagination from '@/components/Pagination'
+import {GoodList,DeleteGood} from '@/api/good'
+import Pagination from '@/components/Pagination/index'
 // import GoodDialog from './Component/GoodDialog'
 
   export default {
-    components: { },
+    components: {Pagination},
     data () {
       return {
         loading:false,
-        GoodsList:[{catName: "实木家具",
-        createTime: 1554628359302,
-        goodName: "测试商品",
-        id: 818256390164480,
-        images: "https://image.etuetf.com/advImage/7a67c24e-3686-4d56-8ba7-b219eebb3e42.jpg",
-        inventory: 75,
-        price: 1,
-        showSales: 1,
-        sn: "1554628284936893062",
-        thumbnail: "https://image.etuetf.com/advImage/48e19f1d-cb72-468e-8eb6-dffa304343cb.jpg"
-        }],
+        GoodsList:[],
         listQuery:{
           page: 1,
           limit: 10,
@@ -62,23 +60,38 @@
     },
     mounted () {
        // this.GetGoodsList();
+       this.GetProData();//获取商品列表
+
     },
     methods: {
+
+      //获取商品列表
+      GetProData(){
+        let that = this;
+        GoodList(that.listQuery).then(res => {
+          if(res != ''){
+            that.GoodsList = res;
+          }
+        })
+      },
+
       //删除数据
       handleDelete(index,row){
         let that = this;
         that.loading = true;
+        let data = [row.id]
+        
         this.$confirm('此操作将永久删除该条数据, 是否继续?', '提示', {confirmButtonText: '确定',cancelButtonText: '取消', type: 'warning'
         }).then(() => {
-            // API.DeleteGood({goodId:row.goodId}).then(res => {
-            //   if(res.code == 0){
-            //       this.$message({ message: '删除成功', type: 'success'});
-            //       that.GetGoodsList();
-            //   }else{
-            //       this.$message.error('删除失败');
-            //   }
-            //   that.loading = false;
-            // }).catch(err => {})
+            DeleteGood(data).then(res => {
+              if(res == ''){
+                that.$message({ message: '删除成功', type: 'success'});
+              }else{
+                that.$message.error('失败');
+              }
+            }).catch(err => {
+              that.$message.error('失败');              
+            })
         }).catch(() => {
           this.$message({
             type: 'info',

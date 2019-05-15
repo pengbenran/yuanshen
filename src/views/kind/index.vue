@@ -48,33 +48,7 @@ import GoodsCatEditDialog from './component/GoodsCatEditDialog'
     data () {
       return {
         loading:false,
-        GoodsCatList:[{addTime: "2019-04-15 15:33:41",
-        catId: 8,
-        description: "娱乐的",
-        img: "https://1875.etuetf.com/background/7cf9a10a-f651-4462-b90d-c2f54ef397df.jpg",
-        name: "手机",
-        parentId: "0",
-        root: 1,
-        showed: 1,
-        sort: 3},
-        {addTime: "2019-04-15 15:33:41",
-        catId: 8,
-        description: "娱乐的",
-        img: "https://1875.etuetf.com/background/7cf9a10a-f651-4462-b90d-c2f54ef397df.jpg",
-        name: "手机",
-        parentId: "0",
-        root: 1,
-        showed: 1,
-        sort: 3},
-        {addTime: "2019-04-15 15:33:41",
-        catId: 8,
-        description: "娱乐的",
-        img: "https://1875.etuetf.com/background/7cf9a10a-f651-4462-b90d-c2f54ef397df.jpg",
-        name: "手机",
-        parentId: "0",
-        root: 1,
-        showed: 1,
-        sort: 3}],
+        GoodsCatList:[],
         AddDialogShow:false,
         listQuery:{
           page: 1,
@@ -121,7 +95,6 @@ import GoodsCatEditDialog from './component/GoodsCatEditDialog'
       GetDataLits(){ 
           let that = this;
           GetList().then(res =>{
-              console.log("拿到分类",res)
               if(res != undefined){
                 that.GoodsCatList = res
               }else{

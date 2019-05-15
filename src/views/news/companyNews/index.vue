@@ -21,7 +21,7 @@
         <el-table-column label="操作" :width="200">
           <template slot-scope="scope">
             <el-button size="mini" @click="toNewsEdit(scope.$index)">编辑</el-button>
-            <el-button size="mini" type="danger" @click="removeMemberLevel(scope.$index,scope.row)">删除</el-button>
+            <el-button size="mini" type="danger" @click="removeNews(scope.$index,scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import {DeleteNew} from "@/api/new"
   export default {
     data () {
       return {
@@ -88,6 +89,33 @@
       //     }
       //   })
       // },
+     removeNews(index,row){
+        let that = this;
+        that.loading = true;
+        let data = {
+          ids:[row.id]
+        }
+        this.$confirm('此操作将永久删除该条数据, 是否继续?', '提示', {confirmButtonText: '确定',cancelButtonText: '取消', type: 'warning'
+        }).then(() => {
+            DeleteNew(row).then(res => {
+              if(res == ''){
+                that.$message({ message: '删除成功', type: 'success'});
+              }else{
+                that.$message.error('失败');
+              }
+            }).catch(err => {
+              that.$message.error('失败');              
+            })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });        
+          that.loading = false;  
+        });
+     },
+   
+
       //编辑
       toNewsEdit(index){
         let that = this;

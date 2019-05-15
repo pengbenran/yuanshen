@@ -34,3 +34,22 @@ export function UpdataList(params) {
      data:params
   })
 }
+
+//获取所有的根级分类
+export function GetRootList(params) {
+  return request({
+    url: '/project/product/getRootItems',
+    method: 'get',
+     data:params
+  })
+}
+
+//指定父级获取分类
+export function GetRootParent(params) {
+  return request({
+    url: '/project/product/getItemsByParentId',
+    method: 'get',
+    params
+  })
+}
+

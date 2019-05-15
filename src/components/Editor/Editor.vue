@@ -108,12 +108,12 @@ export default {
           }
         }
       },
-      serverUrl: window.SITE_CONFIG['baseUrl'] + '/advertisement/uploadFile/imageUpload', // 这里写你要上传的图片服务器地址
+      serverUrl:'http://123.207.84.42:8080/project/uploadImg', // 这里写你要上传的图片服务器地址
       header: {
         // Authorization:this.$cookie.get('token'),
         // Accept: application/json, text/plain, */*
         Accept: "application/json, text/plain, */*",
-        token:this.$cookie.get('token')
+        // token:this.$cookie.get('token')
       } // 有的图片服务器要求请求头需要有token
     };
   },
@@ -141,12 +141,12 @@ export default {
       // 获取富文本组件实例
       let quill = this.$refs.myQuillEditor.quill;
       // 如果上传成功
-      if (res.code == 0) {
+      if (res != '') {
         console.log("igsdasdsad",res,file)
         // 获取光标所在位置
         let length = quill.getSelection().index;
         // 插入图片  res.url为服务器返回的图片地址
-        quill.insertEmbed(length, "image", res.url);
+        quill.insertEmbed(length, "image", res);
         // 调整光标到最后
         quill.setSelection(length + 1);
       } else {
