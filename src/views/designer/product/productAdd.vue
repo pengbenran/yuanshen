@@ -17,14 +17,14 @@
             <el-radio v-model="designerDto.isLarge" label="1">是</el-radio>
             <el-radio v-model="designerDto.isLarge" label="2">否</el-radio>
     </el-form-item>
-    <el-form-item label="图片集" :label-width="formLabelWidth"  prop="photo">
+    <!-- <el-form-item label="图片集" :label-width="formLabelWidth"  prop="photo">
       <div class="avatar-uploader imagesBoxList" v-for="(item,index) in designerDto.imgUrls" :key="item" :index='index'  @click="UpLoadShow(2,index)">
         <img :src="item" class="avatar boxImg">
       </div>
       <div class="avatar-uploader imagesBoxList"  @click="UpLoadShow(2,1)">
         <i class="el-icon-plus avatar-uploader-icon boxImg"></i>
       </div>
-    </el-form-item>
+    </el-form-item> -->
  
   </el-form>
    <Uploadimg ref='UploadImg' @GetDataImg='GetDataImg' :proportion='proportion'/>

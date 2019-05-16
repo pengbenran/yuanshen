@@ -102,7 +102,7 @@ export const constantRoutes = [
       {
         path: 'designer',
         name: 'Designer',
-        component: () => import('@/views/designer/designer'),
+        component: () => import('@/views/designer/designer/designer'),
         meta: { title: '设计师中心',}
       },
       {
@@ -121,7 +121,7 @@ export const constantRoutes = [
        {
         path: '/decorate',
         name: 'Decorate',
-        component: () => import('@/views/designer/decorate'),
+        component: () => import('@/views/designer/decorate/decorate'),
         meta: { title: '装饰中心',}
       },
         {
@@ -140,7 +140,7 @@ export const constantRoutes = [
        {
         path: '/product',
         name: 'Product',
-        component: () => import('@/views/designer/product'),
+        component: () => import('@/views/designer/product/product'),
         meta: { title: '产品中心', }
       },
         {

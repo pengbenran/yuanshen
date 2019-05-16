@@ -77,13 +77,16 @@ import Pagination from '@/components/Pagination/index'
       handleDelete(index,row){
         let that = this;
         that.loading = true;
-        let data = [row.id]
+        let data = {}
+        data.id=row.id
         
         this.$confirm('此操作将永久删除该条数据, 是否继续?', '提示', {confirmButtonText: '确定',cancelButtonText: '取消', type: 'warning'
         }).then(() => {
-            DeleteGood(JSON.stringify(data)).then(res => {
+            DeleteGood(data).then(res => {
               if(res == ''){
+                that.loading = false;
                 that.$message({ message: '删除成功', type: 'success'});
+                that.GetProData()
               }else{
                 that.$message.error('失败');
               }

@@ -75,7 +75,7 @@ export default {
     let that=this
     desiginerUpdate(that.designerDto).then(function(res){
         if(res==''){
-          that.$router.push({path:'index'})
+          that.$router.push({path:'/designer/designer'})
         }
       })
    },
@@ -83,11 +83,16 @@ export default {
     GetDataImg(ImgUrl){
       let that = this;
       if(that.selectType==1){
-        that.designerDto.introduce=ImgUrl
+        that.designerDto.photo=ImgUrl
       }
       else{
-        that.designerDto.imagesList[that.selectIndex]=ImgUrl
-      }    
+        if(that.selectIndex==0){
+          that.designerDto.imgReels.push(ImgUrl)
+        }
+        else{
+          that.designerDto.imgReels[that.selectIndex-1]=ImgUrl
+        }  
+      }  
     }
   }
 }

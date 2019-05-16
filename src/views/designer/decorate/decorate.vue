@@ -11,26 +11,20 @@
         </el-form>
       </el-col>
       <!--列表-->
-      <el-table :data="productList" highlight-current-row style="width: 100%;">
-        <el-table-column label="产品编号" prop="id"> </el-table-column>
-        <el-table-column label="产品名称" prop="name">
+      <el-table :data="decorateList" highlight-current-row style="width: 100%;">
+        <el-table-column label="装饰设计编号" prop="id">
         </el-table-column>
-        <el-table-column label="产品英文名称" prop="egName">
+        <el-table-column label="装饰设计名称" prop="name">
         </el-table-column>
-        <el-table-column label="是否为大图" prop="isLarge">
+        <el-table-column  label="装饰设计背景图"  width="300">
           <template slot-scope="scope">
-                <el-tag>{{scope.row.isLarge == 1 ? '是':'否'}}</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="主图" prop="lordImg">
-          <template slot-scope="scope">
-            <img :src="scope.row.lordImg" :alt="scope.row.name" width="65">
+            <img  :src="scope.row.lordImg" width="80" style="margin-left: 8px">
           </template>
         </el-table-column>
         <el-table-column label="操作" :width="200">
           <template slot-scope="scope">
-            <el-button size="mini" @click="jumpEdit(scope.row)">编辑</el-button>
-            <el-button size="mini" type="danger" @click="removeproduct(scope.row.id)">删除</el-button>
+            <el-button size="mini" @click="jumpEdit(scope.row.id,scope.row)">编辑</el-button>
+            <el-button size="mini" type="danger" @click="removeDesiginer(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -39,12 +33,12 @@
   </div>
 </template>
 <script>
-  import {productList,decorateDelete} from '@/api/product'
+  import {decorateList,decorateDelete} from '@/api/decorate'
   export default {
     data () {
       return {
-        productList:[],
-        formLabelWidth:'120px',
+        decorateList:[],
+        btnLoading:false,
         listQuery:{
           key:'',
           pageIndex:0,
@@ -53,22 +47,20 @@
       }
     },
     mounted () {
-      console.log("过来了吗")
       let that=this
-      that.getProductList()
+      that.getDecorateList()
     },
     components: {},
     methods: { 
       // 获取设计师列表
-      getProductList(){
+      getDecorateList(){
         let that=this
-        
-        productList(that.listQuery).then(function(res){
-          that.productList=res
+        decorateList(that.listQuery).then(function(res){
+          that.decorateList=res
         })
       },
       // 删除设计师
-      removeproduct(id){
+      removeDesiginer(id){
         let params={}
         let that=this
         this.$confirm('此操作将永久删除该条数据, 是否继续?', '提示', {confirmButtonText: '确定',cancelButtonText: '取消', type: 'warning'
@@ -81,20 +73,20 @@
               message: "删除成功",
               duration: 2000
             }); 
-            that.getProductList()
+            that.getDecorateList()
           }
         })
         })  
       },
       //编辑
-      jumpEdit(row){
+      jumpEdit(id,row){
         let that = this;
-        that.$router.push({ path: '/product/productEdit',query:row })
+        that.$router.push({ path: '/decorate/decorateEdit',query:row })
       },
       // 新增
       jumpDesignerAdd(){
         let that = this;
-        that.$router.push({ path: '/product/productAdd' })
+        that.$router.push({ path: '/decorate/decorateAdd' })
       } 
     }
   }

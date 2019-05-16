@@ -16,7 +16,6 @@ export function GetList(params) {
     data:params
   })
 }
-
 //分类删除
 export function DeleteList(params) {
   return request({
@@ -31,7 +30,7 @@ export function UpdataList(params) {
   return request({
     url: '/project/product/item',
     method: 'put',
-     data:params
+    data:params
   })
 }
 
@@ -40,7 +39,7 @@ export function GetRootList(params) {
   return request({
     url: '/project/product/getRootItems',
     method: 'get',
-     data:params
+    data:params
   })
 }
 

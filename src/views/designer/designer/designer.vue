@@ -18,7 +18,10 @@
         </el-table-column>
         <el-table-column label="设计师年龄" prop="age">
         </el-table-column>
-        <el-table-column label="设计师性别" prop="sex">
+        <el-table-column label="设计师性别" prop="sex"> 
+          <template slot-scope="scope">
+            {{scope.row.sex == 1 ? '男' : '女' }}
+          </template>
         </el-table-column>
         <el-table-column label="设计师简介" prop="introduce">
         </el-table-column>
@@ -45,20 +48,10 @@
       return {
         designerList:[],
         editFrom:{},
-        addFrom:{
-          goodId:'',
-          type:3,
-          url:'',
-          status:1,
-          sorts:''
-        },
         showCropper:false,
         proportion:2.8,
-        type:2,
         formLabelWidth:'120px',
         btnLoading:false,
-        connectType:3,
-        catBackgroundId:'',
         listQuery:{
           key:'',
           pageIndex:0,

@@ -13,7 +13,7 @@ export function DeleteGood(params) {
   return request({
     url: '/project/product/info',
     method: 'DELETE',
-    data:params
+    params
   })
 }
 
