@@ -50,7 +50,7 @@ export default {
       },
       newsAddDataarules:{
         title:[
-        { required: true, message: '请输入编号', trigger: 'blur' },
+        { required: true, message: '请输入标题', trigger: 'blur' },
         ],
          stye:[
         { required: true, message: '请输入类型', trigger: 'blur' },

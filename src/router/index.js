@@ -100,19 +100,19 @@ export const constantRoutes = [
     children: [
     // 设计师中心
       {
-        path: 'designer',
+        path: '/designer',
         name: 'Designer',
         component: () => import('@/views/designer/designer'),
         meta: { title: '设计师中心',}
       },
       {
-        path: 'designer/designerAdd',
+        path: '/designer/designerAdd',
         component: () => import('@/views/designer/designer/designerAdd'),
         meta: { title: '设计师新增' },
         hidden:true
       },
       {
-        path: 'designer/designerEdit',
+        path: '/designer/designerEdit',
         component: () => import('@/views/designer/designer/designerEdit'),
         meta: { title: '设计师编辑' },
         hidden:true
