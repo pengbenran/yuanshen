@@ -30,7 +30,7 @@
       </el-input>
     </el-form-item>
 
-    <el-form-item label="分类" :label-width="formLabelWidth"  prop="price" v-if="goodType==1">
+    <el-form-item label="分类" :label-width="formLabelWidth"  prop="price">
       <el-select v-model="AddData.itemId1" clearable placeholder="请选择" @change='changeCatSelect($event,1)'>
         <el-option v-for="item in GoodsCatList" :key="item.id" :label="item.itemName" :value="item.id"></el-option>
       </el-select>
