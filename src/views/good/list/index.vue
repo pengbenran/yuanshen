@@ -31,7 +31,7 @@
              </template>
           </el-table-column>
         </el-table>
-        <!-- <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="GetGoodsList" /> -->
+        <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageIndex" :limit.sync="listQuery.pageSize" @pagination="GetProData" />
       </el-col>
     </el-row>
 
@@ -49,8 +49,8 @@ import Pagination from '@/components/Pagination/index'
         loading:false,
         GoodsList:[],
         listQuery:{
-          page: 1,
-          limit: 10,
+          pageIndex: 1,
+          pageSize: 10,
         },
         total:10,
         multipleSelection:[],
