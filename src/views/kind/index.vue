@@ -39,7 +39,7 @@
 
 <script>
 // import API from '@/api/goods'
- import {GetList,DeleteList} from "@/api/kind";
+import {GetList,DeleteList} from "@/api/kind";
 import GoodsCatAddDialog from './component/GoodsCatAddDialog'
 import GoodsCatEditDialog from './component/GoodsCatEditDialog'
 // import Pagination from '@/components/Pagination'

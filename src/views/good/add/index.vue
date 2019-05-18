@@ -49,12 +49,15 @@
     </el-form-item>      
         
     <el-form-item label="商品图片" :label-width="formLabelWidth"  prop="imgUrls">
-      <div class="avatar-uploader imagesBoxList" v-for="(item,index) in AddData.imgUrls" :key="item" :index='index'  @click="UpLoadShow(2,1.777,index)">
+      <div class="avatar-uploader imagesBoxList" v-for="(item,index) in AddData.imgUrls" :key="item" :index='index'  @click.stop="UpLoadShow(2,1.777,index)">
         <img :src="item" class="avatar boxImg">
+        <span @click.stop='deleImg(item,index)'><i class="el-icon-delete"></i></span>
       </div>
       <div class="avatar-uploader imagesBoxList"  @click="UpLoadShow(2,1.777)">
         <i class="el-icon-plus avatar-uploader-icon boxImg"></i>
       </div>
+
+      <upImg @UpListImg='UpListImg'  ref='upImg' />
     </el-form-item>      
 
     <el-form-item label="淘宝连接" :label-width="formLabelWidth"  prop="taobaoLink">
@@ -84,10 +87,11 @@ import Editors from "@/components/Editor/Editor";
 import {GetList,GetRootList,GetRootParent} from "@/api/kind";
 import {labelList} from '@/api/label'
 import {GoodAdd} from '@/api/good'
+import upImg from '@/components/UpImgList/index'
 
 export default {
     name: 'GoodsCreate',
-    components:{UpLoadImg,Editors},
+    components:{UpLoadImg,Editors,upImg},
     data () {
         return {
            AddData:{
@@ -214,6 +218,16 @@ export default {
         that.AddData.labels.includes(e) ? that.$message.error('已经添加') : that.AddData.labels.push(e);
       },
 
+      //批量上传回调
+      UpListImg(ImgUrl){
+        this.AddData.imgUrls.push(ImgUrl)
+      },
+
+      //删除
+      deleImg(img,index){
+        this.AddData.imgUrls.splice(index,1)
+      },
+
 
         //显示图片上传框 type:上传图片的类型 proportion:上传图片的比例 IMAGE_iNDEX:轮播图时修改指定图片的下标
         UpLoadShow(type,proportion,IMAGE_iNDEX){
@@ -258,9 +272,11 @@ export default {
 }
 
 .imagesBoxList{
-    display: inline-block;height: 189px;width: 336px;
+    display: inline-block;height: 189px;width: 336px;position: relative;
 }
 
+.imagesBoxList span{width: 3rem;height: 3rem;position: absolute;right:0;top:0;}
+.imagesBoxList span i{font-size: 1.4rem;}
 .YongMoney{
     display: flex;align-items: center;
 }
