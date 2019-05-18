@@ -100,19 +100,19 @@ export const constantRoutes = [
     children: [
     // 设计师中心
       {
-        path: 'designer',
+        path: '/designer',
         name: 'Designer',
-        component: () => import('@/views/designer/designer'),
+        component: () => import('@/views/designer/designer/designer'),
         meta: { title: '设计师中心',}
       },
       {
-        path: 'designer/designerAdd',
+        path: '/designer/designerAdd',
         component: () => import('@/views/designer/designer/designerAdd'),
         meta: { title: '设计师新增' },
         hidden:true
       },
       {
-        path: 'designer/designerEdit',
+        path: '/designer/designerEdit',
         component: () => import('@/views/designer/designer/designerEdit'),
         meta: { title: '设计师编辑' },
         hidden:true
@@ -121,7 +121,7 @@ export const constantRoutes = [
        {
         path: '/decorate',
         name: 'Decorate',
-        component: () => import('@/views/designer/decorate'),
+        component: () => import('@/views/designer/decorate/decorate'),
         meta: { title: '装饰中心',}
       },
         {
@@ -140,7 +140,7 @@ export const constantRoutes = [
        {
         path: '/product',
         name: 'Product',
-        component: () => import('@/views/designer/product'),
+        component: () => import('@/views/designer/product/product'),
         meta: { title: '产品中心', }
       },
         {
@@ -155,18 +155,6 @@ export const constantRoutes = [
         meta: { title: '产品中心编辑' },
         hidden:true
       },  
-    ]
-  },
-  {
-    path: '/joinOurs',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'joinOurs',
-        component: () => import('@/views/joinOurs/index'),
-        meta: { title: '加盟中心', icon: 'table' }
-      }
     ]
   },
    {
@@ -228,10 +216,16 @@ export const constantRoutes = [
         component: () => import('@/views/news/industryNews/index'),
         meta: { title: '行业新闻管理' }
       },
+       {
+        path: 'industryNews/newsAdd',
+        component: () => import('@/views/news/industryNews/newsAdd'),
+        meta: { title: '行业新闻新增' },
+        hidden:true
+      },
       {
         path: 'industryNews/newsEdit',
         component: () => import('@/views/news/industryNews/newsEdit'),
-        meta: { title: '公司新闻新增' },
+        meta: { title: '行业新闻编辑' },
         hidden:true
       }
       

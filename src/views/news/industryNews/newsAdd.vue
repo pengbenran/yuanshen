@@ -11,12 +11,12 @@
     <el-form-item label="新闻作者" :label-width="formLabelWidth"  prop="author">
       <el-input v-model="newsAddData.author" placeholder="请输入作者" autocomplete="off"></el-input>
     </el-form-item>
-    <el-form-item label="图片" :label-width="formLabelWidth" prop="itemImg">
+   <!--  <el-form-item label="图片" :label-width="formLabelWidth" prop="itemImg">
         <div class="avatar-uploader" @click="UpLoadShow">
             <img v-if="newsAddData.back_img" :src="newsAddData.back_img" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </div>
-    </el-form-item>
+    </el-form-item> -->
     <el-form-item label="新闻正文" :label-width="formLabelWidth"  prop="subject">
       <Editors v-model="newsAddData.subject" ref="Editor"/>
     </el-form-item> 
@@ -37,7 +37,7 @@ export default {
   data() {
     return {
       newsAddData: {
-       stye:'1',
+       stye:'2',
        title:'',
        back_img:'',
        intro:'',
@@ -80,7 +80,7 @@ export default {
        NewsAdd(that.newsAddData).then(res => {
          if(res == ''){
             that.$message({ message: '添加成功', type: 'success'});
-            that.$router.push({path:'/news/companyNews'})
+            that.$router.push({path:'/news/industryNews'})
          }
        }).catch(err => {
           that.$message.error('失败');

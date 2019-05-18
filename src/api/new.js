@@ -1,36 +1,41 @@
 import request from '@/utils/request'
 //新闻新增
-export function newsAdd(params) {
+export function NewsAdd(params) {
   return request({
     url: '/project/center/news',
     method: 'post',
     data:params
   })
 }
-
 // 新闻删除
-export function DeleteNew(params) {
+export function NewsDelete(params) {
   return request({
     url: '/project/center/news',
     method: 'DELETE',
     params
   })
 }
-
-//修改新闻
-export function UpdataNew(params) {
+//获取公司新闻列表
+export function NewsList(params){
     return request({
-      url: '/project/center/news',
-      method: 'put',
-      data:params
-    })
-  }
-
-//获取商品列表
-// export function GoodList(params){
-//     return request({
-//         url: '/project/product/queryList',
-//         method: 'get',
-//         data:params
-//       })
-// }
+        url: '/project/center/newsListByStyle',
+        method: 'get',
+        params
+      })
+}
+//获取公司新闻详情
+export function NewsDetail(params){
+    return request({
+        url: '/project/center/news',
+        method: 'get',
+        params
+      })
+}
+//公司新闻编辑
+export function NewsUpdate(params){
+    return request({
+        url: '/project/center/news',
+        method: 'put',
+        data:params
+      })
+}

@@ -32,7 +32,7 @@
              </template>
           </el-table-column>
         </el-table>
-        <!-- <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="GetGoodsList" /> -->
+        <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageIndex" :limit.sync="listQuery.pageSize" @pagination="GetProData" />
       </el-col>
     </el-row>
 
@@ -46,6 +46,7 @@ import Pagination from '@/components/Pagination/index'
 import upImg from '@/components/UpImgList/index'
 // import GoodDialog from './Component/GoodDialog'
 
+
   export default {
     components: {Pagination,upImg},
     data () {
@@ -53,8 +54,8 @@ import upImg from '@/components/UpImgList/index'
         loading:false,
         GoodsList:[],
         listQuery:{
-          page: 1,
-          limit: 10,
+          pageIndex: 1,
+          pageSize: 10,
         },
         total:10,
         multipleSelection:[],
@@ -81,13 +82,16 @@ import upImg from '@/components/UpImgList/index'
       handleDelete(index,row){
         let that = this;
         that.loading = true;
-        let data = [row.id]
+        let data = {}
+        data.id=row.id
         
         this.$confirm('此操作将永久删除该条数据, 是否继续?', '提示', {confirmButtonText: '确定',cancelButtonText: '取消', type: 'warning'
         }).then(() => {
             DeleteGood(data).then(res => {
               if(res == ''){
+                that.loading = false;
                 that.$message({ message: '删除成功', type: 'success'});
+                that.GetProData()
               }else{
                 that.$message.error('失败');
               }
