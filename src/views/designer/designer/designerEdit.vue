@@ -75,7 +75,7 @@ export default {
     let that=this
     desiginerUpdate(that.designerDto).then(function(res){
         if(res==''){
-          that.$router.push({path:'/designer/designer'})
+          that.$router.push({path:'/designer'})
         }
       })
    },

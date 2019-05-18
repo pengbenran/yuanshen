@@ -4,7 +4,7 @@
   <el-form :model="AddData"  :rules="AddDatarules" ref="AddruleForm">
     <el-form-item label="商品类型" :label-width="formLabelWidth"  prop="type">
       <el-select v-model="AddData.type" clearable placeholder="请选择">
-        <el-option v-for="item in typeList" :key="item" :label="item" :value="item"></el-option>
+        <el-option v-for="(item,index) in typeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
       </el-select>
     </el-form-item>   
     <el-form-item label="商品名称" :label-width="formLabelWidth"  prop="name">
@@ -16,21 +16,21 @@
       </el-input>
     </el-form-item>    
     <el-form-item label="商品销量" :label-width="formLabelWidth"  prop="sales">
-      <el-input v-model="AddData.sales" placeholder="请输入销量" autocomplete="off">
+      <el-input v-model="AddData.sales" placeholder="请输入商品销量" autocomplete="off">
         <template slot="append">元</template>
       </el-input>
     </el-form-item>     
     <el-form-item label="商品数量" :label-width="formLabelWidth"  prop="amount">
-      <el-input v-model="AddData.amount" placeholder="请输入总量" autocomplete="off">
+      <el-input v-model="AddData.amount" placeholder="请输入商品数量" autocomplete="off">
         <template slot="append">个</template>
       </el-input>
     </el-form-item>  
     <el-form-item label="尺寸" :label-width="formLabelWidth"  prop="measure">
-      <el-input v-model="AddData.measure" placeholder="请输入测量" autocomplete="off">
+      <el-input v-model="AddData.measure" placeholder="请输入尺寸" autocomplete="off">
       </el-input>
     </el-form-item>
 
-    <el-form-item label="分类" :label-width="formLabelWidth"  prop="price">
+    <el-form-item label="分类" :label-width="formLabelWidth"  prop="price" v-if="goodType==1">
       <el-select v-model="AddData.itemId1" clearable placeholder="请选择" @change='changeCatSelect($event,1)'>
         <el-option v-for="item in GoodsCatList" :key="item.id" :label="item.itemName" :value="item.id"></el-option>
       </el-select>
@@ -39,36 +39,35 @@
       </el-select>
     </el-form-item>
 
-    <el-form-item label="材质" :label-width="formLabelWidth"  prop="texture">
+    <el-form-item label="材质" :label-width="formLabelWidth"  prop="texture" v-if="goodType==1">
       <el-input v-model="AddData.texture" placeholder="请输入质地" autocomplete="off"></el-input>
     </el-form-item> 
+    <el-form-item label="整体特色" :label-width="formLabelWidth"  prop="texture" v-if="goodType==2">
+      <el-input v-model="AddData.texture" placeholder="请输入整体特色" autocomplete="off"></el-input>
+    </el-form-item> 
 
-    <el-form-item label="商品详情" :label-width="formLabelWidth"  prop="productDeclare">
-       <Editors v-model="AddData.productDeclare" ref="Editor"/>
-      <el-input v-model="AddData.productDeclare" placeholder="请输入商品详情" autocomplete="off"></el-input>
+    <el-form-item label="商品说明" :label-width="formLabelWidth"  prop="productDeclare">
+      <el-input v-model="AddData.productDeclare" placeholder="请输入商品说明" autocomplete="off"></el-input>
     </el-form-item>      
         
     <el-form-item label="商品图片" :label-width="formLabelWidth"  prop="imgUrls">
-      <div class="avatar-uploader imagesBoxList" v-for="(item,index) in AddData.imgUrls" :key="item" :index='index'  @click="UpLoadShow(2,1.777,index)">
+      <div class="avatar-uploader imagesBoxList" v-for="(item,index) in AddData.imgUrls" :key="item" :index='index'  @click="UpLoadShow(index)">
         <img :src="item" class="avatar boxImg">
       </div>
-      <div class="avatar-uploader imagesBoxList"  @click="UpLoadShow(2,1.777)">
+      <div class="avatar-uploader imagesBoxList"  @click="UpLoadShow(0)">
         <i class="el-icon-plus avatar-uploader-icon boxImg"></i>
       </div>
     </el-form-item>      
 
-    <el-form-item label="淘宝连接" :label-width="formLabelWidth"  prop="taobaoLink">
+    <el-form-item label="淘宝连接" :label-width="formLabelWidth"  prop="taobaoLink" v-if="goodType==1">
       <el-input v-model="AddData.taobaoLink" placeholder="请输入淘宝连接" autocomplete="off"></el-input>
     </el-form-item>  
 
     <el-form-item label="标签" :label-width="formLabelWidth"  prop="labels">
-      <el-tag v-for="item in AddData.labels">{{item}}</el-tag>
-      <el-select v-model="AddData.labelsList" clearable placeholder="请选择" @change="LabelSelect">
-        <el-option v-for="item in labelListData" :key="item.name" :label="item.name" :value="item.name"></el-option>
-      </el-select>
+      <el-checkbox-group v-model="AddData.labels">
+        <el-checkbox v-for="item in labelListData" :key="item.id" :label="item.id">{{item.name}}</el-checkbox>
+      </el-checkbox-group>
     </el-form-item>
-
-
   </el-form>
   <div slot="footer" class="dialog-footer">
     <el-button >取 消</el-button>
@@ -95,13 +94,14 @@ export default {
                imgUrls:[],
                itemId:'',
                labels:[],
-               labelsList:'',
+               type:''
 
            },
+           goodType:1,
            formLabelWidth:'120px',
            AddDatarules:{
-             type:[
-                { required: true, message: '请输入编号', trigger: 'blur' },
+            type:[
+                { required: true, message: '请输选择商品类型', trigger: 'blur' },
              ],
              name:[
                 { required: true, message: '请输入商品名称', trigger: 'blur' },
@@ -116,38 +116,33 @@ export default {
                 { required: true, message: '请输入商品总量', trigger: 'blur' },
              ],
              measure:[
-                { required: true, message: '请输入测量', trigger: 'blur' },
+                { required: true, message: '请输入尺寸', trigger: 'blur' },
              ],
              texture:[
-                { required: true, message: '请设置质地', trigger: 'blur' },
+                { required: true, message: '请输入材质', trigger: 'blur' },
              ],
              productDeclare:[
-                { required: true, message: '请设置商品详情', trigger: 'blur' },
+                { required: true, message: '请设置商品简介', trigger: 'blur' },
              ],
              imgUrls:[
                 { required: true, message: '请设置图片', trigger: 'blur' },
              ],
-             taobaoLink:[
-                { required: true, message: '请设置淘宝连接', trigger: 'blur' },
-             ],
-             itemId:[
-                { required: true, message: '请设置分类', trigger: 'blur' },
-             ],
-             labels:[
-                { required: true, message: '请设置标签', trigger: 'blur' },
-             ],
            },
-           typeList:['普通商品','整装商品'],
+           typeList:[{value:'1',name:'普通商品'},{value:'2',name:'整装商品'}],
            GoodsCatList:[],
            ChilerGoodsCatList:[],
            labelListData:[],
            proportion:1, //设置图片比例
            imageIndex:'',//轮播时指定的下标
-           ImgType:1
+           ImgType:1,
+           selectIndex:''
         }
     },
-    computed:{
-       
+    watch: {
+      "AddData.type": function (value) {
+        let that=this
+        that.goodType=value
+      },
     },
     mounted () {
        this.GetDataLits();//拿到分类
@@ -207,27 +202,23 @@ export default {
           that.AddData.itemId = id 
         }
       },
-
-      //标签数据的赋值
-      LabelSelect(e){
-        let that = this;
-        that.AddData.labels.includes(e) ? that.$message.error('已经添加') : that.AddData.labels.push(e);
-      },
-
-
         //显示图片上传框 type:上传图片的类型 proportion:上传图片的比例 IMAGE_iNDEX:轮播图时修改指定图片的下标
-        UpLoadShow(type,proportion,IMAGE_iNDEX){
-            this.ImgType = type;
-            this.proportion = proportion;
-            IMAGE_iNDEX != undefined ? this.imageIndex = IMAGE_iNDEX : this.imageIndex = undefined
-            this.$refs.UploadImg.showDialog(true)
+        UpLoadShow(index){
+          let that=this
+          that.selectIndex=index
+          that.$refs.UploadImg.showDialog(true)
         },
 
         //图片返回赋值
         GetDataImg(ImgUrl){
-            let that = this;
-            that.imageIndex== undefined ? that.AddData.imgUrls.push(ImgUrl) : that.AddData.imgUrls[that.imageIndex] = ImgUrl;
-            }
+          let that = this;
+          if(that.selectIndex==0){
+            that.AddData.imgUrls.push(ImgUrl)
+          }
+          else{
+            that.AddData.imgUrls[that.selectIndex]=ImgUrl
+          } 
+        } 
         },
     }
 
@@ -250,7 +241,7 @@ export default {
     text-align: center;
 }
 .avatar-uploader .boxImg{
-    display: inline-block;height: 189px;width: 336px;
+    display: inline-block;height: 178px;width: 178px;
 }
 .generateSn{
     display: flex;
@@ -258,7 +249,7 @@ export default {
 }
 
 .imagesBoxList{
-    display: inline-block;height: 189px;width: 336px;
+    display: inline-block;height: 189px;width: 178px;
 }
 
 .YongMoney{

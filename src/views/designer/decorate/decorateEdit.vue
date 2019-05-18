@@ -75,7 +75,6 @@ export default {
         that.designerDto.lordImg=ImgUrl
       }
       else{
-        console.log('that.selectIndex',that.selectIndex)
         if(that.selectIndex==-1){
           that.designerDto.imgUrls.push(ImgUrl)
         }

@@ -94,12 +94,12 @@
       //编辑
       jumpEdit(id){
         let that = this;
-        that.$router.push({ path: 'designer/designerEdit',query:{id:id} })
+        that.$router.push({ path: '/designer/designerEdit',query:{id:id} })
       },
       // 新增
       jumpDesignerAdd(){
         let that = this;
-        that.$router.push({ path: 'designer/designerAdd' })
+        that.$router.push({ path: '/designer/designerAdd' })
       } 
     }
   }

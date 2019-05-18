@@ -100,19 +100,19 @@ export const constantRoutes = [
     children: [
     // 设计师中心
       {
-        path: 'designer',
+        path: '/designer',
         name: 'Designer',
         component: () => import('@/views/designer/designer/designer'),
         meta: { title: '设计师中心',}
       },
       {
-        path: 'designer/designerAdd',
+        path: '/designer/designerAdd',
         component: () => import('@/views/designer/designer/designerAdd'),
         meta: { title: '设计师新增' },
         hidden:true
       },
       {
-        path: 'designer/designerEdit',
+        path: '/designer/designerEdit',
         component: () => import('@/views/designer/designer/designerEdit'),
         meta: { title: '设计师编辑' },
         hidden:true
@@ -228,10 +228,16 @@ export const constantRoutes = [
         component: () => import('@/views/news/industryNews/index'),
         meta: { title: '行业新闻管理' }
       },
+       {
+        path: 'industryNews/newsAdd',
+        component: () => import('@/views/news/industryNews/newsAdd'),
+        meta: { title: '行业新闻新增' },
+        hidden:true
+      },
       {
         path: 'industryNews/newsEdit',
         component: () => import('@/views/news/industryNews/newsEdit'),
-        meta: { title: '公司新闻新增' },
+        meta: { title: '行业新闻编辑' },
         hidden:true
       }
       
