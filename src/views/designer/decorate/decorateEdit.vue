@@ -6,7 +6,9 @@
     </el-form-item>
     <el-form-item label="装饰背景图" :label-width="formLabelWidth"  prop="lordImg">
       <div class="avatar-uploader"   @click="UpLoadShow(1.76)">
-        <img v-if="designerDto.lordImg" :src="designerDto.lordImg" class="avatar">
+        <div  v-if="designerDto.lordImg" >
+          <img :src="designerDto.lordImg" class="avatar">
+        </div>
         <i v-else class="el-icon-plus avatar-uploader-icon">
         </i></div>
     </el-form-item>
