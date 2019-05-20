@@ -18,8 +18,9 @@
       <div class="avatar-uploader"   @click="UpLoadShow(1)"><img v-if="designerDto.photo" :src="designerDto.photo" class="avatar"><i v-else class="el-icon-plus avatar-uploader-icon"></i></div>
     </el-form-item>
     <el-form-item label="设计师作品集" :label-width="formLabelWidth"  prop="images">
-      <div class="avatar-uploader imagesBoxList" v-for="(item,index) in designerDto.imgReels" :key="item" :index='index' @click="UpLoadShow(2,index)">
+      <div class="avatar-uploader imagesBoxList ImgBox" v-for="(item,index) in designerDto.imgReels" :key="item" :index='index' @click.stop="UpLoadShow(2,index)">
         <img :src="item" class="boxImg">
+        <span @click.stop='deleImg(item,index)'><i class="el-icon-delete"></i></span>
       </div>
       <div class="avatar-uploader imagesBoxList"  @click="UpLoadShow(2,0)">
         <i class="el-icon-plus avatar-uploader-icon boxImg"></i>
@@ -79,6 +80,13 @@ export default {
         }
       })
    },
+
+    //删除
+    deleImg(img,index){
+      this.designerDto.imgReels.splice(index,1)
+    },
+
+
     //图片返回赋值
     GetDataImg(ImgUrl){
       let that = this;
@@ -126,6 +134,16 @@ display: inline-block;height: 178px;width: 1780px;
 }
 .avatar-uploader .avatar{
     display: inline-block;height: 178px;width: 178px;
+}
+.ImgBox{
+  position:relative;
+}
+.ImgBox span{
+  text-align: center;
+  width: 2rem;height: 2rem;line-height: 2rem;
+  background: rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: 0;right: 0;
 }
 </style>
 

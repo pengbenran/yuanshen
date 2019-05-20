@@ -14,8 +14,9 @@
     </el-form-item> -->
 
     <el-form-item label="装饰作品集" :label-width="formLabelWidth"  prop="photo">
-      <div class="avatar-uploader1" v-for="(item,index) in designerDto.imgUrls" :key="item" :index='index'  @click="UpLoadShow(1,index)">
+      <div class="avatar-uploader1 ImgBox" v-for="(item,index) in designerDto.imgUrls" :key="item" :index='index'  @click.stop="UpLoadShow(1,index)">
         <img :src="item" class="avatar boxImg">
+        <span @click.stop='deleImg(item,index)'><i class="el-icon-delete"></i></span>
       </div>
       <div class="avatar-uploader1"  @click="UpLoadShow(1,-1)">
         <i class="el-icon-plus avatar-uploader-icon boxImg"></i>
@@ -69,6 +70,11 @@ export default {
     that.selectIndex=index
     that.$refs.UploadImg.showDialog(true)
    },
+
+    //删除
+    deleImg(img,index){
+      this.designerDto.imgUrls.splice(index,1)
+    },
 
     //图片返回赋值
     GetDataImg(ImgUrl){
@@ -125,6 +131,15 @@ display: inline-block;height: 313px;width: 313px;
 }
 .avatar-uploader .avatar{
     display: inline-block;height: 178px;width: 313px;
+}
+.ImgBox{
+  position:relative;
+}
+.ImgBox span{
+  width: 2rem;height: 2rem;line-height: 2rem;
+  background: rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: 0;right: 0;
 }
 </style>
 
