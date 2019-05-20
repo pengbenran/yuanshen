@@ -100,10 +100,10 @@ export default {
     if(that.$route.query.index==0){
       that.proportion=0.5337
     }else if(that.$route.query.index==4){
-      that.proportion=3.05
+      that.proportion=2.96
     }
     else if(that.$route.query.index==5){
-      that.proportion=1.5
+      that.proportion=1.467
     }
     else{
       that.proportion=1

@@ -12,21 +12,22 @@
     </el-form-item>
     <el-form-item label="商品价格" :label-width="formLabelWidth"  prop="price">
       <el-input v-model="AddData.price" placeholder="请输入价格" autocomplete="off">
-        <template slot="append">元</template>
       </el-input>
     </el-form-item>    
     <el-form-item label="商品销量" :label-width="formLabelWidth"  prop="sales">
       <el-input v-model="AddData.sales" placeholder="请输入商品销量" autocomplete="off">
-        <template slot="append">元</template>
       </el-input>
     </el-form-item>     
     <el-form-item label="商品数量" :label-width="formLabelWidth"  prop="amount">
       <el-input v-model="AddData.amount" placeholder="请输入商品数量" autocomplete="off">
-        <template slot="append">个</template>
       </el-input>
     </el-form-item>  
-    <el-form-item label="尺寸" :label-width="formLabelWidth"  prop="measure">
+    <el-form-item label="尺寸" :label-width="formLabelWidth"  prop="measure" v-if="goodType==1">
       <el-input v-model="AddData.measure" placeholder="请输入尺寸" autocomplete="off">
+      </el-input>
+    </el-form-item>
+    <el-form-item label="面积" :label-width="formLabelWidth"  prop="measure" v-else>
+      <el-input v-model="AddData.measure" placeholder="请输入面积" autocomplete="off">
       </el-input>
     </el-form-item>
 
@@ -271,7 +272,7 @@ export default {
 }
 
 .imagesBoxList{
-    display: inline-block;height: 189px;width: 336px;position: relative;
+    display: inline-block;height: 178px;width: 178px;position: relative;
 }
 
 .imagesBoxList span{width: 3rem;height: 3rem;position: absolute;right:0;top:0;}

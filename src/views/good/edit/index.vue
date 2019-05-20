@@ -25,8 +25,12 @@
         <template slot="append">个</template>
       </el-input>
     </el-form-item>  
-    <el-form-item label="尺寸" :label-width="formLabelWidth"  prop="measure">
-      <el-input v-model="AddData.measure" placeholder="请输入测量" autocomplete="off">
+    <el-form-item label="尺寸" :label-width="formLabelWidth"  prop="measure" v-if="goodType==1">
+      <el-input v-model="AddData.measure" placeholder="请输入尺寸" autocomplete="off">
+      </el-input>
+    </el-form-item>
+    <el-form-item label="面积" :label-width="formLabelWidth"  prop="measure" v-else>
+      <el-input v-model="AddData.measure" placeholder="请输入面积" autocomplete="off">
       </el-input>
     </el-form-item>
 
@@ -50,6 +54,7 @@
     <el-form-item label="商品图片" :label-width="formLabelWidth"  prop="imgUrls">
       <div class="avatar-uploader imagesBoxList" v-for="(item,index) in AddData.imgUrls" :key="item" :index='index'  @click="UpLoadShow(index)">
         <img :src="item" class="avatar boxImg">
+        <span @click.stop='deleImg(item,index)'><i class="el-icon-delete"></i></span>
       </div>
       <div class="avatar-uploader imagesBoxList"  @click="UpLoadShow(0)">
         <i class="el-icon-plus avatar-uploader-icon boxImg"></i>
@@ -212,7 +217,10 @@ export default {
           IMAGE_iNDEX != undefined ? this.imageIndex = IMAGE_iNDEX : this.imageIndex = undefined
           this.$refs.UploadImg.showDialog(true)
       },
-
+      //删除
+      deleImg(img,index){
+        this.AddData.imgUrls.splice(index,1)
+      },
       //图片返回赋值
       GetDataImg(ImgUrl){
           let that = this;
@@ -250,7 +258,8 @@ export default {
 .imagesBoxList{
     display: inline-block;height: 178px;width: 178px;
 }
-
+.imagesBoxList span{width: 3rem;height: 3rem;position: absolute;right:0;top:0;}
+.imagesBoxList span i{font-size: 1.4rem;}
 .YongMoney{
     display: flex;align-items: center;
 }
