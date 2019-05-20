@@ -12,17 +12,14 @@
     </el-form-item>
     <el-form-item label="商品价格" :label-width="formLabelWidth"  prop="price">
       <el-input v-model="AddData.price" placeholder="请输入价格" autocomplete="off">
-        <template slot="append">元</template>
       </el-input>
     </el-form-item>    
     <el-form-item label="商品销量" :label-width="formLabelWidth"  prop="sales">
       <el-input v-model="AddData.sales" placeholder="请输入销量" autocomplete="off">
-        <template slot="append">元</template>
       </el-input>
     </el-form-item>     
     <el-form-item label="商品数量" :label-width="formLabelWidth"  prop="amount">
       <el-input v-model="AddData.amount" placeholder="请输入总量" autocomplete="off">
-        <template slot="append">个</template>
       </el-input>
     </el-form-item>  
     <el-form-item label="尺寸" :label-width="formLabelWidth"  prop="measure" v-if="goodType==1">
