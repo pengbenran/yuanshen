@@ -31,6 +31,6 @@ export function GoodList(params){
     return request({
         url: '/project/product/queryList',
         method: 'get',
-        data:params
+        params
       })
 }

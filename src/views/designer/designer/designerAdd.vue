@@ -15,15 +15,19 @@
       <el-input v-model="designerDto.introduce" placeholder="请输入设计师简介" autocomplete="off"></el-input>
     </el-form-item>
     <el-form-item label="设计师头像" :label-width="formLabelWidth"  prop="photo">
-      <div class="avatar-uploader"   @click="UpLoadShow(1)"><img v-if="designerDto.photo" :src="designerDto.photo" class="avatar"><i v-else class="el-icon-plus avatar-uploader-icon"></i></div>
+      <div class="avatar-uploader"   @click="UpLoadShow(1)">
+        <img v-if="designerDto.photo" :src="designerDto.photo" class="avatar">
+        <i v-else class="el-icon-plus avatar-uploader-icon"></i></div>
     </el-form-item>
     <el-form-item label="设计师作品集" :label-width="formLabelWidth"  prop="images">
-      <div class="avatar-uploader imagesBoxList" v-for="(item,index) in imgReels" :key="item" :index='index' @click="UpLoadShow(2,index)">
+      <div class="avatar-uploader imagesBoxList" v-for="(item,index) in designerDto.imgReels" :key="index" :index='index' @click="UpLoadShow(2,index)">
         <img :src="item" class="boxImg">
+        <span  @click.stop='deleImg(item,index)'><i class="el-icon-delete"></i></span>
       </div>
       <div class="avatar-uploader imagesBoxList"  @click="UpLoadShow(2,0)">
         <i class="el-icon-plus avatar-uploader-icon boxImg"></i>
       </div>
+      <upImg @UpListImg='UpListImg'  ref='upImg' />
     </el-form-item>
   </el-form>
    <Uploadimg ref='UploadImg' @GetDataImg='GetDataImg' :proportion='proportion'/>
@@ -36,6 +40,7 @@
 <script>
 import Editor from "@/components/Editor/Editor";
 import Uploadimg from "@/components/UpLoadImg/UpLoadImg";
+import upImg from '@/components/UpImgList/index'
 import {desiginerAdd} from "@/api/designer"
 export default {
   data() {
@@ -54,7 +59,7 @@ export default {
   computed:{
   
   },
-  components:{Uploadimg},
+  components:{Uploadimg,upImg},
   methods: {
    UpLoadShow(type,index){
     let that=this
@@ -71,7 +76,15 @@ export default {
       }
     })
    },
-   // 获取推荐师详情
+       //批量上传回调
+       UpListImg(ImgUrl){
+        this.designerDto.imgReels.push(ImgUrl)
+      },
+
+      //删除
+      deleImg(img,index){
+        this.designerDto.imgReels.splice(index,1)
+      },
 
 
    
@@ -101,6 +114,8 @@ display: inline-block;height: 178px;width: 1780px;
 .imagesBoxList{
     display: inline-block;height: 180px;width: 180px;
 }
+.imagesBoxList span{width: 3rem;height: 3rem;position: absolute;right:0;top:0;}
+.imagesBoxList span i{font-size: 1.4rem;}
 .avatar-uploader{
     border: 1px dashed #d9d9d9;
     border-radius: 6px;

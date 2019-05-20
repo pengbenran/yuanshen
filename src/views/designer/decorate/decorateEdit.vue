@@ -4,14 +4,14 @@
     <el-form-item label="装饰名称" :label-width="formLabelWidth"  prop="name">
       <el-input v-model="designerDto.name" placeholder="请输入装饰名称" autocomplete="off"></el-input>
     </el-form-item>
-    <el-form-item label="装饰背景图" :label-width="formLabelWidth"  prop="lordImg">
+    <!-- <el-form-item label="装饰背景图" :label-width="formLabelWidth"  prop="lordImg">
       <div class="avatar-uploader"   @click="UpLoadShow(1.76)">
         <div  v-if="designerDto.lordImg" >
           <img :src="designerDto.lordImg" class="avatar">
         </div>
         <i v-else class="el-icon-plus avatar-uploader-icon">
         </i></div>
-    </el-form-item>
+    </el-form-item> -->
 
     <el-form-item label="装饰作品集" :label-width="formLabelWidth"  prop="photo">
       <div class="avatar-uploader1" v-for="(item,index) in designerDto.imgUrls" :key="item" :index='index'  @click="UpLoadShow(1,index)">

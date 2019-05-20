@@ -12,6 +12,9 @@
         <img v-if="designerDto.lordImg" :src="designerDto.lordImg" class="avatar">
       </div>
     </el-form-item>
+    <el-form-item label="产品详情" :label-width="formLabelWidth"  prop="subject">
+      <Editors v-model="designerDto.imgUrls[0]" ref="Editor"/>
+    </el-form-item> 
    <!--  <el-form-item label="图片集" :label-width="formLabelWidth"  prop="photo">
       <div class="avatar-uploader imagesBoxList" v-for="(item,index) in designerDto.imgUrls" :key="item" :index='index'  @click="UpLoadShow(2,index)">
         <img :src="item" class="avatar boxImg">
@@ -30,7 +33,7 @@
 </template>
 
 <script>
-import Editor from "@/components/Editor/Editor";
+import Editors from "@/components/Editor/Editor";
 import Uploadimg from "@/components/UpLoadImg/UpLoadImg";
 import {decorateUpdate} from "@/api/product"
 export default {
@@ -47,7 +50,7 @@ export default {
       formLabelWidth:'120px'
     }
   },
-  components:{Editor,Uploadimg},
+  components:{Editors,Uploadimg},
   mounted(){
     let that=this
     this.designerDto = this.$route.query;

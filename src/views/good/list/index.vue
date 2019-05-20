@@ -3,6 +3,7 @@
     <el-row :gutter="24">
       <el-col :span="24">
         <el-button type="primary" @click="AddGoods">新增商品</el-button>
+
       </el-col>
       <el-col :span="24" v-loading="loading"  element-loading-text="正在查询中。。。" >
         <el-table ref="multipleTable" :data="GoodsList" tooltip-effect="dark" style="width: 100%">
@@ -31,7 +32,7 @@
              </template>
           </el-table-column>
         </el-table>
-        <!-- <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="GetGoodsList" /> -->
+        <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageIndex" :limit.sync="listQuery.pageSize" @pagination="GetProData" />
       </el-col>
     </el-row>
 
@@ -42,15 +43,19 @@
 <script>
 import {GoodList,DeleteGood} from '@/api/good'
 import Pagination from '@/components/Pagination/index'
+import upImg from '@/components/UpImgList/index'
+// import GoodDialog from './Component/GoodDialog'
+
+
   export default {
-    components: {Pagination},
+    components: {Pagination,upImg},
     data () {
       return {
         loading:false,
         GoodsList:[],
         listQuery:{
-          page: 1,
-          limit: 10,
+          pageIndex: 1,
+          pageSize: 10,
         },
         total:10,
         multipleSelection:[],

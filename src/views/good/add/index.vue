@@ -12,21 +12,22 @@
     </el-form-item>
     <el-form-item label="商品价格" :label-width="formLabelWidth"  prop="price">
       <el-input v-model="AddData.price" placeholder="请输入价格" autocomplete="off">
-        <template slot="append">元</template>
       </el-input>
     </el-form-item>    
     <el-form-item label="商品销量" :label-width="formLabelWidth"  prop="sales">
       <el-input v-model="AddData.sales" placeholder="请输入商品销量" autocomplete="off">
-        <template slot="append">元</template>
       </el-input>
     </el-form-item>     
     <el-form-item label="商品数量" :label-width="formLabelWidth"  prop="amount">
       <el-input v-model="AddData.amount" placeholder="请输入商品数量" autocomplete="off">
-        <template slot="append">个</template>
       </el-input>
     </el-form-item>  
-    <el-form-item label="尺寸" :label-width="formLabelWidth"  prop="measure">
+    <el-form-item label="尺寸" :label-width="formLabelWidth"  prop="measure" v-if="goodType==1">
       <el-input v-model="AddData.measure" placeholder="请输入尺寸" autocomplete="off">
+      </el-input>
+    </el-form-item>
+    <el-form-item label="面积" :label-width="formLabelWidth"  prop="measure" v-else>
+      <el-input v-model="AddData.measure" placeholder="请输入面积" autocomplete="off">
       </el-input>
     </el-form-item>
 
@@ -53,10 +54,13 @@
     <el-form-item label="商品图片" :label-width="formLabelWidth"  prop="imgUrls">
       <div class="avatar-uploader imagesBoxList" v-for="(item,index) in AddData.imgUrls" :key="item" :index='index'  @click="UpLoadShow(index)">
         <img :src="item" class="avatar boxImg">
+        <span @click.stop='deleImg(item,index)'><i class="el-icon-delete"></i></span>
       </div>
       <div class="avatar-uploader imagesBoxList"  @click="UpLoadShow(0)">
         <i class="el-icon-plus avatar-uploader-icon boxImg"></i>
       </div>
+
+      <upImg @UpListImg='UpListImg'  ref='upImg' />
     </el-form-item>      
 
     <el-form-item label="淘宝连接" :label-width="formLabelWidth"  prop="taobaoLink" v-if="goodType==1">
@@ -83,10 +87,11 @@ import Editors from "@/components/Editor/Editor";
 import {GetList,GetRootList,GetRootParent} from "@/api/kind";
 import {labelList} from '@/api/label'
 import {GoodAdd} from '@/api/good'
+import upImg from '@/components/UpImgList/index'
 
 export default {
     name: 'GoodsCreate',
-    components:{UpLoadImg,Editors},
+    components:{UpLoadImg,Editors,upImg},
     data () {
         return {
            AddData:{
@@ -202,6 +207,24 @@ export default {
           that.AddData.itemId = id 
         }
       },
+
+
+      //标签数据的赋值
+      LabelSelect(e){
+        let that = this;
+        that.AddData.labels.includes(e) ? that.$message.error('已经添加') : that.AddData.labels.push(e);
+      },
+
+      //批量上传回调
+      UpListImg(ImgUrl){
+        this.AddData.imgUrls.push(ImgUrl)
+      },
+
+      //删除
+      deleImg(img,index){
+        this.AddData.imgUrls.splice(index,1)
+      },
+
         //显示图片上传框 type:上传图片的类型 proportion:上传图片的比例 IMAGE_iNDEX:轮播图时修改指定图片的下标
         UpLoadShow(index){
           let that=this
@@ -249,9 +272,11 @@ export default {
 }
 
 .imagesBoxList{
-    display: inline-block;height: 189px;width: 178px;
+    display: inline-block;height: 178px;width: 178px;position: relative;
 }
 
+.imagesBoxList span{width: 3rem;height: 3rem;position: absolute;right:0;top:0;}
+.imagesBoxList span i{font-size: 1.4rem;}
 .YongMoney{
     display: flex;align-items: center;
 }

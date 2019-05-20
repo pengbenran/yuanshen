@@ -157,18 +157,6 @@ export const constantRoutes = [
       },  
     ]
   },
-  {
-    path: '/joinOurs',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'joinOurs',
-        component: () => import('@/views/joinOurs/index'),
-        meta: { title: '加盟中心', icon: 'table' }
-      }
-    ]
-  },
    {
     path: '/good',
     component: Layout,
