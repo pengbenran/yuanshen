@@ -22,10 +22,7 @@
     <el-form-item label="设计师作品集" :label-width="formLabelWidth"  prop="images">
       <div class="avatar-uploader imagesBoxList" v-for="(item,index) in designerDto.imgReels" :key="index" :index='index' @click="UpLoadShow(2,index)">
         <img :src="item" class="boxImg">
-        <span  @click.stop='deleImg(item,index)'><i class="el-icon-delete"></i></span>
-      </div>
-      <div class="avatar-uploader imagesBoxList"  @click="UpLoadShow(2,0)">
-        <i class="el-icon-plus avatar-uploader-icon boxImg"></i>
+        <span @click.stop='deleImg(index)'><i class="el-icon-error"></i></span>
       </div>
       <upImg @UpListImg='UpListImg'  ref='upImg' />
     </el-form-item>
@@ -82,7 +79,7 @@ export default {
       },
 
       //删除
-      deleImg(img,index){
+      deleImg(index){
         this.designerDto.imgReels.splice(index,1)
       },
 
@@ -95,12 +92,8 @@ export default {
         that.designerDto.photo=ImgUrl
       }
       else{
-        if(that.selectIndex==0){
-          that.designerDto.imgReels.push(ImgUrl)
-        }
-        else{
-          that.designerDto.imgReels[that.selectIndex]=ImgUrl
-        }  
+        that.designerDto.imgReels.splice(that.selectIndex,1)
+        that.designerDto.imgReels.push(ImgUrl)
       }  
     }
   }

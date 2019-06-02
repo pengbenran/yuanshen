@@ -1,8 +1,13 @@
 <template>
-    <div style="margin-top:20px;margin-right:100px;">
+    <div style="display: inline-block;">
         <input type="file" name="file" id="file" class="inputfile" accept="image/png, image/jpeg, image/gif, image/jpg" @change="changepic" ref="Elinput"   multiple /> 
-        <el-button type="primary"  size="mini" @click="choiceImg">选取文件</el-button>
-        <img :src="item.url" style="width:100px;height:100px;float:left;" v-for="(item,index) in fileList" :key="index" v-if='item.upbool'/>
+        <div class="avatar-uploader imagesBoxList" v-for="(item,index) in fileList" :key="index" v-if='item.upbool' @click="choiceImg">
+            <img :src="item.url" class="avatar boxImg">
+            <span @click.stop='deleImg(index)'><i class="el-icon-error"></i></span>
+        </div>
+        <div class="avatar-uploader imagesBoxList" @click="choiceImg">
+            <i class="el-icon-plus avatar-uploader-icon boxImg"></i>
+        </div>
         <el-button type="success" size="mini" @click='Upclick'>开始上传</el-button>
     </div>
 </template>
@@ -19,6 +24,10 @@
       methods:{
         choiceImg(){
           this.$refs.Elinput.dispatchEvent(new MouseEvent('click')) 
+        },
+         //删除
+        deleImg(index){
+            this.fileList.splice(index,1)
         },
         fn(e){
              let self = this              
@@ -39,10 +48,10 @@
           return {url,obj:files[index],upbool:true}
         })
        this.fileList.push(...urls)
-       
-    }
+       console.log('this.fileList',this.fileList)
+    },
     //建立一個可存取到該file的url
-    ,getObjectURL(file) {
+    getObjectURL(file) {
         var url = null ;
         // 下面函数执行的效果是一样的，只是需要针对不同的浏览器执行不同的 js 函数而已
         if (window.createObjectURL!=undefined) { // basic
@@ -77,10 +86,9 @@
         }).then(res => {
             console.log(index,"上传图片的返回值",res)
             that.fileList[index].upbool = false;
-            console.log("上传图片的返回值asdasd",that.fileList)
             this.$emit('UpListImg',res)
             this.$message({
-            message: '恭喜你，这是一条成功消息',
+            message: '恭喜你，图片上传成功',
             type: 'success'
             });
         })
@@ -130,4 +138,35 @@
         .btn-success{
           background: green;
         }
+
+        .avatar-uploader{
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+.avatar-uploader .avatar-uploader-icon,.avatar-uploader img{
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+}
+.avatar-uploader .boxImg{
+    display: inline-block;height: 178px;width: 178px;
+}
+.generateSn{
+    display: flex;
+    align-items: center;
+}
+
+.imagesBoxList{
+    display: inline-block;height: 178px;width: 178px;position: relative;
+}
+
+.imagesBoxList span{position: absolute;right:0;top:0;}
+.imagesBoxList span i{font-size: 1.4rem;}
 </style>

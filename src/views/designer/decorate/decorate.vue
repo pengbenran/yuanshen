@@ -16,11 +16,6 @@
         </el-table-column>
         <el-table-column label="装饰设计名称" prop="name">
         </el-table-column>
-        <el-table-column  label="装饰设计背景图"  width="300">
-          <template slot-scope="scope">
-            <img  :src="scope.row.lordImg" width="80" style="margin-left: 8px">
-          </template>
-        </el-table-column>
         <el-table-column label="操作" :width="200">
           <template slot-scope="scope">
             <el-button size="mini" @click="jumpEdit(scope.row.id,scope.row)">编辑</el-button>

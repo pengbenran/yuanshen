@@ -10,15 +10,15 @@
     <el-form-item label="商品名称" :label-width="formLabelWidth"  prop="name">
       <el-input v-model="AddData.name" placeholder="请输入商品名称" autocomplete="off"></el-input>
     </el-form-item>
-    <el-form-item label="商品价格" :label-width="formLabelWidth"  prop="price">
+    <el-form-item label="商品价格" :label-width="formLabelWidth"  prop="price" v-if="goodType==1">
       <el-input v-model="AddData.price" placeholder="请输入价格" autocomplete="off">
       </el-input>
     </el-form-item>    
-    <el-form-item label="商品销量" :label-width="formLabelWidth"  prop="sales">
+    <el-form-item label="商品销量" :label-width="formLabelWidth"  prop="sales" v-if="goodType==1">
       <el-input v-model="AddData.sales" placeholder="请输入商品销量" autocomplete="off">
       </el-input>
     </el-form-item>     
-    <el-form-item label="商品数量" :label-width="formLabelWidth"  prop="amount">
+    <el-form-item label="商品数量" :label-width="formLabelWidth"  prop="amount" v-if="goodType==1">
       <el-input v-model="AddData.amount" placeholder="请输入商品数量" autocomplete="off">
       </el-input>
     </el-form-item>  
@@ -31,17 +31,20 @@
       </el-input>
     </el-form-item>
 
-    <el-form-item label="分类" :label-width="formLabelWidth"  prop="price">
+    <el-form-item label="分类" :label-width="formLabelWidth"  prop="itemId">
       <el-select v-model="AddData.itemId1" clearable placeholder="请选择" @change='changeCatSelect($event,1)'>
         <el-option v-for="item in GoodsCatList" :key="item.id" :label="item.itemName" :value="item.id"></el-option>
       </el-select>
       <el-select v-model="AddData.itemId2" clearable placeholder="请选择" @change='changeCatSelect($event,2)' v-if="ChilerGoodsCatList.length > 0">
         <el-option v-for="item in ChilerGoodsCatList" :key="item.id" :label="item.itemName" :value="item.id"></el-option>
       </el-select>
+      <el-select v-model="AddData.itemId3" clearable placeholder="请选择" @change='changeCatSelect($event,3)' v-if="ChilerTwoGoodsCatList.length > 0">
+        <el-option v-for="item in ChilerTwoGoodsCatList" :key="item.id" :label="item.itemName" :value="item.id"></el-option>
+      </el-select>
     </el-form-item>
 
     <el-form-item label="材质" :label-width="formLabelWidth"  prop="texture" v-if="goodType==1">
-      <el-input v-model="AddData.texture" placeholder="请输入质地" autocomplete="off"></el-input>
+      <el-input v-model="AddData.texture" placeholder="请输入材质" autocomplete="off"></el-input>
     </el-form-item> 
     <el-form-item label="整体特色" :label-width="formLabelWidth"  prop="texture" v-if="goodType==2">
       <el-input v-model="AddData.texture" placeholder="请输入整体特色" autocomplete="off"></el-input>
@@ -52,14 +55,10 @@
     </el-form-item>      
         
     <el-form-item label="商品图片" :label-width="formLabelWidth"  prop="imgUrls">
-      <div class="avatar-uploader imagesBoxList" v-for="(item,index) in AddData.imgUrls" :key="item" :index='index'  @click="UpLoadShow(index)">
+      <div class="avatar-uploader imagesBoxList" v-for="(item,index) in AddData.imgUrls" :key="index">
         <img :src="item" class="avatar boxImg">
-        <span @click.stop='deleImg(item,index)'><i class="el-icon-delete"></i></span>
+        <span @click.stop='deleImg(index)'><i class="el-icon-error"></i></span>
       </div>
-      <div class="avatar-uploader imagesBoxList"  @click="UpLoadShow(0)">
-        <i class="el-icon-plus avatar-uploader-icon boxImg"></i>
-      </div>
-
       <upImg @UpListImg='UpListImg'  ref='upImg' />
     </el-form-item>      
 
@@ -74,7 +73,6 @@
     </el-form-item>
   </el-form>
   <div slot="footer" class="dialog-footer">
-    <el-button >取 消</el-button>
     <el-button type="primary" @click="ClcikAddData">上架商品</el-button>
   </div>
 
@@ -136,6 +134,7 @@ export default {
            typeList:[{value:'1',name:'普通商品'},{value:'2',name:'整装商品'}],
            GoodsCatList:[],
            ChilerGoodsCatList:[],
+           ChilerTwoGoodsCatList:[],
            labelListData:[],
            proportion:1, //设置图片比例
            imageIndex:'',//轮播时指定的下标
@@ -189,21 +188,39 @@ export default {
               that.$message.error('失败');
           })
       },
-
+      //删除
+      deleImg(index){
+        this.AddData.imgUrls.splice(index,1)
+      },
       //分类数据赋值
       changeCatSelect(id,index){
         let that = this;
         if(index == 1){
           GetRootParent({parentId:id}).then(res => {
-            if(res != ''){
-             that.ChilerGoodsCatList = res;
+            if(res.length!=0){
+              that.AddData.itemId=''
+              that.ChilerGoodsCatList = res;
             }else{
-             that.AddData.itemId = id 
+              that.ChilerGoodsCatList = []
+              that.AddData.itemId = id 
             }
           }).catch(err => {
             that.$message.error('失败');  
           })
         }else if(index == 2){
+          GetRootParent({parentId:id}).then(res => {
+            if(res.length!=0){
+              that.AddData.itemId=''
+              that.ChilerTwoGoodsCatList = res;
+            }else{
+             that.ChilerTwoGoodsCatList = [];
+             that.AddData.itemId = id 
+            }
+          }).catch(err => {
+            that.$message.error('失败');  
+          })
+        }
+        else{
           that.AddData.itemId = id 
         }
       },
@@ -218,17 +235,14 @@ export default {
       //批量上传回调
       UpListImg(ImgUrl){
         this.AddData.imgUrls.push(ImgUrl)
-      },
-
-      //删除
-      deleImg(img,index){
-        this.AddData.imgUrls.splice(index,1)
+        console.log();
       },
 
         //显示图片上传框 type:上传图片的类型 proportion:上传图片的比例 IMAGE_iNDEX:轮播图时修改指定图片的下标
         UpLoadShow(index){
           let that=this
           that.selectIndex=index
+          // that.$refs.upImg.choiceImg()
           that.$refs.UploadImg.showDialog(true)
         },
 
@@ -247,36 +261,6 @@ export default {
 
 </script>
 <style >
-.avatar-uploader{
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    display: inline-block;
-}
-.avatar-uploader .avatar-uploader-icon,.avatar-uploader img{
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-}
-.avatar-uploader .boxImg{
-    display: inline-block;height: 178px;width: 178px;
-}
-.generateSn{
-    display: flex;
-    align-items: center;
-}
-
-.imagesBoxList{
-    display: inline-block;height: 178px;width: 178px;position: relative;
-}
-
-.imagesBoxList span{width: 3rem;height: 3rem;position: absolute;right:0;top:0;}
-.imagesBoxList span i{font-size: 1.4rem;}
 .YongMoney{
     display: flex;align-items: center;
 }
@@ -285,4 +269,20 @@ export default {
     align-items: center;
 }
 
+.avatar-uploader{
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+.avatar-uploader .boxImg{
+    display: inline-block;height: 178px;width: 178px;
+}
+.imagesBoxList{
+    display: inline-block;height: 178px;width: 178px;position: relative;
+}
+.imagesBoxList span{position: absolute;right:0;top:0;}
+.imagesBoxList span i{font-size: 1.4rem;}
 </style>

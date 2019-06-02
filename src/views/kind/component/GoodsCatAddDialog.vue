@@ -6,11 +6,11 @@
             </el-form-item>
             <el-form-item label="是否为根级" :label-width="formLabelWidth"  prop="isRoot">
                 <el-radio v-model="addFrom.isRoot" label="1"  @change = 'changeRadio'>是</el-radio>
-                <el-radio v-model="addFrom.isRoot" label="2"  @change = 'changeRadio'>否</el-radio>
+                <el-radio v-model="addFrom.isRoot" label="0"  @change = 'changeRadio'>否</el-radio>
                 <el-alert style="padding:0px" title="注：根级也就是一级分类" type="success"></el-alert>
             </el-form-item>
-            <el-form-item label="关联父级" :label-width="formLabelWidth" prop="parentId" v-if="addFrom.isRoot == 2">
-                <el-select v-model="addFrom.parentId" @change='changSelect'>
+            <el-form-item label="关联父级" :label-width="formLabelWidth" prop="parentId" v-if="addFrom.isRoot == 0">
+                <el-select v-model="addFrom.parentId" @change='changSelect' clearable placeholder="请选择">
                     <el-option
                     v-for="(item,index) in parentList"
                     :key="index"
@@ -19,6 +19,15 @@
                     <span style="float: left">{{ item.itemName }}</span>
                 </el-option>
             </el-select>
+            <el-select v-model="addFrom.childId" @change='changChildSelect' v-if="childList.length!=0" clearable placeholder="请选择">
+                <el-option
+                v-for="(item,index) in childList"
+                :key="index"
+                :label="item.itemName"
+                :value="item.id">
+                <span style="float: left">{{ item.itemName }}</span>
+            </el-option>
+        </el-select>
         </el-form-item>
         <el-form-item label="分类背景图片" :label-width="formLabelWidth" prop="itemImg" v-if="addFrom.isRoot == 1">
             <div class="avatar-uploader" @click="UpLoadShow">
@@ -35,7 +44,7 @@
     </div>
 </template>
 <script>
- import {kindAdd} from "@/api/kind";
+ import {kindAdd,GetRootParent} from "@/api/kind";
 export default {
     props: ['addFrom'],
     data () {
@@ -43,6 +52,7 @@ export default {
            AddShow:false,
            parentList:[],
            formLabelWidth:'120px',
+           childList:[],
            AddDatarules:{
              itemName:[
                 { required: true, message: '分类名称', trigger: 'blur' },
@@ -54,10 +64,15 @@ export default {
         //添加用户的等级
         addData(){
             let that = this;
+            let params={}
+            Object.assign(params,that.addFrom);
             this.$refs['AddruleForm'].validate((valid) => {
             if (valid) {
-                console.log('that.addFrom',that.addFrom);
-                kindAdd(that.addFrom).then(res => {
+                if(that.addFrom.childId){
+                    params.parentId=params.childId
+                    params.parentName=params.childName
+                }
+                kindAdd(params).then(res => {
                     if(res == ''){
                         that.$message({ message: '添加成功', type: 'success'});
                         that.$parent.GetDataLits();
@@ -78,9 +93,23 @@ export default {
         changSelect(e){
             let that = this;
             that.addFrom.parentName = this.parentList.find(Fres => Fres.id == e).itemName
+            that.getItemsByParentId(e)
         },
-        
-
+        changChildSelect(e){
+            let that = this;
+            console.log(e);
+            that.addFrom.childName = this.childList.find(Fres => Fres.id == e).itemName
+        },
+        // 根据父ID查询子分类
+        getItemsByParentId(parentId){
+            let params={}
+            let that=this
+            params.parentId=parentId
+            GetRootParent(params).then(function(res){
+                that.childList=res
+                console.log(that.childList);
+            })
+        },
         //选择父级
         changeRadio(){
             this.addFrom.root == 1 ? this.addFrom.parentId = '0' : this.addFrom.parentId = ''

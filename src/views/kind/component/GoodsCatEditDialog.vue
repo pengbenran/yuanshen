@@ -5,11 +5,11 @@
                 <el-input v-model="editFrom.itemName" placeholder="请输入内容" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="是否为根级" :label-width="formLabelWidth"  prop="isRoot">
-                <el-radio v-model="editFrom.isRoot" label="0"  @change = 'changeRadio'>是</el-radio>
-                <el-radio v-model="editFrom.isRoot" label="1"  @change = 'changeRadio'>否</el-radio>
+                <el-radio v-model="editFrom.isRoot" label="1"  @change = 'changeRadio'>是</el-radio>
+                <el-radio v-model="editFrom.isRoot" label="0"  @change = 'changeRadio'>否</el-radio>
                 <el-alert style="padding:0px" title="注：根级也就是设置初始等级" type="success"></el-alert>
             </el-form-item>
-            <el-form-item label="关联父级" :label-width="formLabelWidth" prop="parentId" v-if="editFrom.isRoot == 1">
+            <el-form-item label="关联父级" :label-width="formLabelWidth" prop="parentId" v-if="editFrom.isRoot == 0">
                 <el-select v-model="editFrom.parentId" @change='changSelect'>
                     <el-option
                     v-for="(item,index) in parentList"
@@ -17,11 +17,19 @@
                     :label="item.itemName"
                     :value="item.id">
                     <span style="float: left">{{ item.itemName }}</span>
-                    <!-- <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span> -->
                 </el-option>
             </el-select>
+            <el-select v-model="editFrom.childId" @change='changChildSelect' v-if="childList.length!=0" clearable placeholder="请选择">
+                <el-option
+                v-for="(item,index) in childList"
+                :key="index"
+                :label="item.itemName"
+                :value="item.id">
+                <span style="float: left">{{ item.itemName }}</span>
+            </el-option>
+        </el-select>
         </el-form-item>
-        <el-form-item label="图片" :label-width="formLabelWidth" prop="itemImg"  v-if="editFrom.isRoot == 0">
+        <el-form-item label="图片" :label-width="formLabelWidth" prop="itemImg"  v-if="editFrom.isRoot == 1">
             <div class="avatar-uploader" @click="UpLoadShow">
                 <img v-if="editFrom.itemImg" :src="editFrom.itemImg" class="avatar">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -36,7 +44,7 @@
     </div>
 </template>
 <script>
- import {UpdataList} from "@/api/kind";
+ import {UpdataList,GetRootParent} from "@/api/kind";
 export default {
     props: ['editFrom'],
     data () {
@@ -48,16 +56,23 @@ export default {
              itemName:[
                 { required: true, message: '分类名称', trigger: 'blur' },
              ]
-           }
+           },
+           childList:[],
         }
     },
     methods: {
         //添加用户的等级
         addData(){
             let that = this;
+            let params={}
+            Object.assign(params,that.editFrom);
             this.$refs['AddruleForm'].validate((valid) => {
             if (valid) {
-                UpdataList(that.editFrom).then(res => {
+                if(that.editFrom.childId){
+                    params.parentId=params.childId
+                    params.parentName=params.childName
+                }
+                UpdataList(params).then(res => {
                     if(res == ''){
                         that.$message({ message: '成功', type: 'success'});
                         that.$parent.GetDataLits();
@@ -72,14 +87,26 @@ export default {
             }
             });
         },
-
         //父级名称赋值
         changSelect(e){
             let that = this;
             that.editFrom.parentName = this.parentList.find(Fres => Fres.id == e).itemName
+            that.getItemsByParentId(e)
         },
-        
-
+         changChildSelect(e){
+            let that = this;
+            that.editFrom.childName = this.childList.find(Fres => Fres.id == e).itemName
+        },
+        // 根据父ID查询子分类
+        getItemsByParentId(parentId){
+            let params={}
+            let that=this
+            params.parentId=parentId
+            GetRootParent(params).then(function(res){
+                that.childList=res
+                console.log(that.childList);
+            })
+        },
         //选择父级
         changeRadio(){
             this.editFrom.isRoot == 0 ? this.editFrom.parentId = '0' : this.editFrom.parentId = ''
@@ -88,9 +115,7 @@ export default {
         //添加显示
         EditDiaLogShow(list){
             this.AddShow =true
-            this.editFrom.isRoot =this.editFrom.isRoot+''
             this.parentList=list
-            console.log(this.editFrom);
         },
         UpLoadShow(){   
             this.$emit('ImgClick');

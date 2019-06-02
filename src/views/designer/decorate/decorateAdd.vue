@@ -7,15 +7,12 @@
    <el-form-item label="装饰作品集" :label-width="formLabelWidth"  prop="photo">
       <div class="avatar-uploader imagesBoxList" v-for="(item,index) in designerDto.imgUrls" :key="item" :index='index'  @click="UpLoadShow(1,index)">
         <img :src="item" class="avatar boxImg">
-         <span  @click.stop='deleImg(item,index)'><i class="el-icon-delete"></i></span>
+        <span @click.stop='deleImg(index)'><i class="el-icon-error"></i></span>
       </div>
-      <div class="avatar-uploader imagesBoxList"  @click="UpLoadShow(1,-1)">
-        <i class="el-icon-plus avatar-uploader-icon boxImg"></i>
-      </div>
+      <upImg @UpListImg='UpListImg'  ref='upImg' />
     </el-form-item>
   </el-form>
    <Uploadimg ref='UploadImg' @GetDataImg='GetDataImg' :proportion='proportion'/>
-   <upImg @UpListImg='UpListImg'  ref='upImg' />
    <div slot="footer" class="dialog-footer">
     <el-button type="primary" @click="submit">确定</el-button>
   </div>
@@ -31,7 +28,7 @@ export default {
   data() {
     return { 
       designerDto: {
-       lordImg:'',
+       lordImg:'22',
        imgUrls:[]
       },
       selectType:'',
@@ -59,7 +56,7 @@ export default {
       },
 
       //删除
-      deleImg(img,index){
+      deleImg(index){
         this.designerDto.imgUrls.splice(index,1)
       },
    // 设计师新增
@@ -95,11 +92,6 @@ export default {
 .imagesBox{
 display: inline-block;height: 313px;width: 313px;
 }
-.imagesBoxList{
-    display: inline-block;height: 180px;width: 180px;
-}
-.imagesBoxList span{width: 3rem;height: 3rem;position: absolute;right:0;top:0;}
-.imagesBoxList span i{font-size: 1.4rem;}
 .avatar-uploader{
     border: 1px dashed #d9d9d9;
     border-radius: 6px;
@@ -108,17 +100,13 @@ display: inline-block;height: 313px;width: 313px;
     overflow: hidden;
     display: inline-block;
 }
-.avatar-uploader,.avatar-uploader-icon img{
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-}
 .avatar-uploader .boxImg{
     display: inline-block;height: 178px;width: 178px;
 }
-.dialog-footer{margin-top:20px; }
+.imagesBoxList{
+    display: inline-block;height: 178px;width: 178px;position: relative;
+}
+.imagesBoxList span{position: absolute;right:0;top:0;}
+.imagesBoxList span i{font-size: 1.4rem;}
 </style>
 

@@ -5,12 +5,11 @@
       <el-input v-model="designerDto.name" placeholder="请输入装饰名称" autocomplete="off"></el-input>
     </el-form-item>
     <el-form-item label="装饰作品集" :label-width="formLabelWidth"  prop="photo">
-      <div class="avatar-uploader imagesBoxList" v-for="(item,index) in designerDto.imgUrls" :key="item" :index='index'  @click="UpLoadShow(1,index)">
+      <div class="avatar-uploader imagesBoxList" v-for="(item,index) in designerDto.imgUrls" :key="item" :index='index'  @click.stop="UpLoadShow(index)">
         <img :src="item" class="avatar boxImg">
+        <span @click.stop='deleImg(index)'><i class="el-icon-error"></i></span>
       </div>
-      <div class="avatar-uploader imagesBoxList"  @click="UpLoadShow(1,-1)">
-        <i class="el-icon-plus avatar-uploader-icon boxImg"></i>
-      </div>
+      <upImg @UpListImg='UpListImg'  ref='upImg' />
     </el-form-item>
  
   </el-form>
@@ -24,6 +23,7 @@
 <script>
 import Editor from "@/components/Editor/Editor";
 import Uploadimg from "@/components/UpLoadImg/UpLoadImg";
+import upImg from '@/components/UpImgList/index'
 import {decorateUpdate} from "@/api/decorate"
 export default {
   data() {
@@ -38,7 +38,7 @@ export default {
       formLabelWidth:'120px'
     }
   },
-  components:{Editor,Uploadimg},
+  components:{Editor,Uploadimg,upImg},
   mounted(){
     let that=this
     this.designerDto = this.$route.query;
@@ -53,28 +53,23 @@ export default {
         }
       })
    },
-
+   UpListImg(ImgUrl){
+    this.designerDto.imgUrls.push(ImgUrl)
+  },
    UpLoadShow(proportion,index){
     let that=this
-    that.proportion=proportion
     that.selectIndex=index
     that.$refs.UploadImg.showDialog(true)
    },
-  
+    //删除
+    deleImg(index){
+      this.designerDto.imgUrls.splice(index,1)
+    },
     //图片返回赋值
     GetDataImg(ImgUrl){
       let that = this;
-      if(that.proportion==1.76){
-        that.designerDto.lordImg=ImgUrl
-      }
-      else{
-        if(that.selectIndex==-1){
-          that.designerDto.imgUrls.push(ImgUrl)
-        }
-        else{
-          that.designerDto.imgUrls[that.selectIndex]=ImgUrl
-        }
-      }    
+      that.designerDto.imgUrls.splice(that.selectIndex,1)
+      that.designerDto.imgUrls.push(ImgUrl)    
     }
   }
 }
@@ -92,16 +87,13 @@ display: inline-block;height: 313px;width: 313px;
     overflow: hidden;
     display: inline-block;
 }
-.avatar-uploader .avatar-uploader-icon,.avatar-uploader img{
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-}
 .avatar-uploader .boxImg{
     display: inline-block;height: 178px;width: 178px;
 }
+.imagesBoxList{
+    display: inline-block;height: 178px;width: 178px;position: relative;
+}
+.imagesBoxList span{position: absolute;right:0;top:0;}
+.imagesBoxList span i{font-size: 1.4rem;}
 </style>
 

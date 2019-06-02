@@ -34,3 +34,11 @@ export function GoodList(params){
         params
       })
 }
+//获取商品详情
+export function getGoodInfo(params){
+    return request({
+        url: '/project/product/info',
+        method: 'get',
+        params
+      })
+}

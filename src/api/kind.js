@@ -52,3 +52,13 @@ export function GetRootParent(params) {
   })
 }
 
+// 查看分类详细信息
+export function getKindDetail(params) {
+  return request({
+    url: '/project/product/item',
+    method: 'get',
+    params
+  })
+}
+
+

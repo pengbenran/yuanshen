@@ -9,7 +9,7 @@
           <el-table-column align="center"  prop="itemName" label="分类名称"></el-table-column>
           <el-table-column align="center"  prop="isRoot" label="是否为根级">
             <template slot-scope="scope">
-                <el-tag :type="scope.row.isRoot == 1 ? 'error' : 'success' ">{{ scope.row.isRoot == 2? '否' : '是' }}</el-tag>
+                <el-tag :type="scope.row.isRoot == 1 ? 'error' : 'success' ">{{ scope.row.isRoot == 0? '否' : '是' }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column align="center"  prop="itemImg" label="分类图片">
@@ -139,14 +139,23 @@ import GoodsCatEditDialog from './component/GoodsCatEditDialog'
       //添加商品分类
       AddGoodsCat(){
         let that = this;
+        that.addFrom={
+         parentId:'',
+         parentName:'',
+         isRoot:'1',
+         itemImg:'',
+         itemName:'',
+         rank:0,
+         itemDeclare:''
+       }
         that.$refs.GoodsCatAddDialog.DiaLogShow(that.rootList)
       },
       
       //编辑数据 index下标、row指定当前条数据
       handlEdit(row){
         let that = this;
+        row.isRoot =row.isRoot+''
         that.editFrom=row
-        console.log(that.rootList);
         this.$refs.GoodsCatEditDialog.EditDiaLogShow(that.rootList)
       }   
     }

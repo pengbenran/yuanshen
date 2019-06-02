@@ -18,8 +18,9 @@
       <div class="avatar-uploader"   @click="UpLoadShow(1)"><img v-if="designerDto.photo" :src="designerDto.photo" class="avatar"><i v-else class="el-icon-plus avatar-uploader-icon"></i></div>
     </el-form-item>
     <el-form-item label="设计师作品集" :label-width="formLabelWidth"  prop="images">
-      <div class="avatar-uploader imagesBoxList" v-for="(item,index) in designerDto.imgReels" :key="item" :index='index' @click="UpLoadShow(2,index)">
+      <div class="avatar-uploader imagesBoxList ImgBox" v-for="(item,index) in designerDto.imgReels" :key="item" :index='index' @click.stop="UpLoadShow(2,index)">
         <img :src="item" class="boxImg">
+        <span @click.stop='deleImg(index)'><i class="el-icon-error"></i></span>
       </div>
       <div class="avatar-uploader imagesBoxList"  @click="UpLoadShow(2,0)">
         <i class="el-icon-plus avatar-uploader-icon boxImg"></i>
@@ -79,6 +80,13 @@ export default {
         }
       })
    },
+
+    //删除
+    deleImg(index){
+      this.designerDto.imgReels.splice(index,1)
+    },
+
+
     //图片返回赋值
     GetDataImg(ImgUrl){
       let that = this;
@@ -86,12 +94,8 @@ export default {
         that.designerDto.photo=ImgUrl
       }
       else{
-        if(that.selectIndex==0){
-          that.designerDto.imgReels.push(ImgUrl)
-        }
-        else{
-          that.designerDto.imgReels[that.selectIndex-1]=ImgUrl
-        }  
+        that.designerDto.imgReels.splice(that.selectIndex,1)
+        that.designerDto.imgReels.push(ImgUrl)
       }  
     }
   }
@@ -105,6 +109,8 @@ display: inline-block;height: 178px;width: 1780px;
 .imagesBoxList{
     display: inline-block;height: 180px;width: 180px;
 }
+.imagesBoxList span{width: 3rem;height: 3rem;position: absolute;right:0;top:0;}
+.imagesBoxList span i{font-size: 1.4rem;}
 .avatar-uploader{
     border: 1px dashed #d9d9d9;
     border-radius: 6px;
@@ -127,5 +133,6 @@ display: inline-block;height: 178px;width: 1780px;
 .avatar-uploader .avatar{
     display: inline-block;height: 178px;width: 178px;
 }
+
 </style>
 
