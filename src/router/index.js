@@ -155,6 +155,26 @@ export const constantRoutes = [
         meta: { title: '产品中心编辑' },
         hidden:true
       },  
+      {
+        path: '/product/ItemAdd',
+        name: 'Item',
+        component: () => import('@/views/designer/product/Item/itemAdd'),
+        meta: { title: '产品中心分类', },
+         hidden:true
+      },
+      {
+        path: '/product/ItemList',
+        name: 'Item',
+        component: () => import('@/views/designer/product/Item/itemList'),
+        meta: { title: '产品分类列表', }
+      },
+       {
+        path: '/product/ItemEdit',
+        name: 'Item',
+        component: () => import('@/views/designer/product/Item/itemEdit'),
+        meta: { title: '产品中心编辑', },
+         hidden:true
+      },
     ]
   },
    {

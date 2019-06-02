@@ -7,8 +7,16 @@
     <el-form-item label="产品英文名称" :label-width="formLabelWidth"  prop="name">
       <el-input v-model="designerDto.egName" placeholder="请输入英文名称" autocomplete="off"></el-input>
     </el-form-item>
+
+    <el-form-item label="绑定分类" :label-width="formLabelWidth"  prop="itemId">
+        <el-select v-model="designerDto.itemId" placeholder="请选择"  @change='selectChange'>
+        <el-option v-for="item in ItemList" :key="item.id" :label="item.name" :value="item.id">
+        </el-option>
+      </el-select>
+    </el-form-item> 
+
     <el-form-item label="产品中心背景图" :label-width="formLabelWidth"  prop="lordImg">
-      <div class="avatar-uploader"   @click="UpLoadShow(1)">
+      <div class="  "   @click="UpLoadShow(1)">
         <img v-if="designerDto.lordImg" :src="designerDto.lordImg" class="avatar">
       </div>
     </el-form-item>
@@ -35,7 +43,7 @@
 <script>
 import Editors from "@/components/Editor/Editor";
 import Uploadimg from "@/components/UpLoadImg/UpLoadImg";
-import {decorateUpdate} from "@/api/product"
+import {decorateUpdate,PItemList} from "@/api/product"
 export default {
   data() {
     return { 
@@ -47,7 +55,8 @@ export default {
       selectType:'',
       selectIndex:'',
       proportion:1,
-      formLabelWidth:'120px'
+      formLabelWidth:'120px',
+      ItemList:[]
     }
   },
   components:{Editors,Uploadimg},
@@ -61,6 +70,7 @@ export default {
     else{
       that.proportion=1.742
     }
+        this.getProductList();
   },
   methods: {
    UpLoadShow(type,index){
@@ -70,6 +80,13 @@ export default {
     that.$refs.UploadImg.showDialog(true)
    },
 
+ // 获取设计师列表
+    getProductList(){
+      let that=this
+      PItemList({pageIndex:0,pageSize:10}).then(function(res){
+        that.ItemList=res
+      })
+    },
 
    // 设计师新增
    submit(){
@@ -79,6 +96,12 @@ export default {
           that.$router.push({path:'/product'})
         }
       })
+   },
+
+   //分类名称赋值
+   selectChange(e){
+     console.log("够啦啊是大",e)
+       this.designerDto.itemName = this.ItemList.find(f => f.id == e).name;
    },
 
     //图片返回赋值

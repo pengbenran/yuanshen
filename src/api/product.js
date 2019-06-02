@@ -40,3 +40,39 @@ export function decorateDelete(params) {
     params
   })
 }
+
+// 产品中心分类添加
+export function PItemAdd(params) {
+  return request({
+    url: '/project/design/item/product',
+    method: 'post',
+    data:params
+  })
+}
+
+// 产品中心分类获取
+export function PItemList(params) {
+  return request({
+    url: '/project/design/item/product/queryList',
+    method: 'get',
+    params
+  })
+}
+
+// 产品中心分类修改
+export function PItemEdit(params) {
+  return request({
+    url: '/project/design/item/product',
+    method: 'PUT',
+    data:params
+  })
+}
+
+// 产品中心分类删除
+export function PItemDelete(params) {
+  return request({
+    url: '/project/design/item/product',
+    method: 'DELETE',
+    params
+  })
+}

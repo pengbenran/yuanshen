@@ -7,23 +7,15 @@
     <el-form-item label="产品英文名称" :label-width="formLabelWidth"  prop="name">
       <el-input v-model="designerDto.egName" placeholder="请输入英文名称" autocomplete="off"></el-input>
     </el-form-item>
-
-    <el-form-item label="绑定分类" :label-width="formLabelWidth"  prop="itemId">
-        <el-select v-model="designerDto.itemId" placeholder="请选择"  @change='selectChange'>
-        <el-option v-for="item in ItemList" :key="item.id" :label="item.name" :value="item.id">
-        </el-option>
-      </el-select>
-    </el-form-item> 
-
     <el-form-item label="主图" :label-width="formLabelWidth"  prop="lordImg">
       <div class="avatar-uploader"   @click="UpLoadShow(1)">
         <img v-if="designerDto.lordImg" :src="designerDto.lordImg" class="avatar">
         <i v-else class="el-icon-plus avatar-uploader-icon">
         </i></div>
     </el-form-item>
-    <el-form-item label="产品详情" :label-width="formLabelWidth"  prop="subject">
+    <!--<el-form-item label="产品详情" :label-width="formLabelWidth"  prop="subject">
       <Editors v-model="designerDto.imgUrls[0]" ref="Editor"/>
-    </el-form-item> 
+    </el-form-item> -->
     <!-- <el-form-item label="图片集" :label-width="formLabelWidth"  prop="photo">
       <div class="avatar-uploader imagesBoxList" v-for="(item,index) in designerDto.imgUrls" :key="item" :index='index'  @click="UpLoadShow(2,index)">
         <img :src="item" class="avatar boxImg">
@@ -44,27 +36,25 @@
 <script>
 import Editors from "@/components/Editor/Editor";
 import Uploadimg from "@/components/UpLoadImg/UpLoadImg";
-import {decorateAdd,PItemList} from "@/api/product"
+import {PItemAdd} from "@/api/product"
 export default {
   data() {
     return { 
       designerDto: {
        isLarge:"1",
        lordImg:'',
-       itemName:'',
-       imgUrls:[]
+    //    imgUrls:[]
       },
       selectType:'',
       selectIndex:'',
-      proportion:1,
-      formLabelWidth:'120px',
-      ItemList:[]
+      proportion:0.82,
+      formLabelWidth:'120px'
     }
   },
   components:{Editors,Uploadimg},
   mounted(){
     let that=this
-    this.getProductList();
+    
   },
   methods: {
    UpLoadShow(type,index){
@@ -74,28 +64,15 @@ export default {
     that.$refs.UploadImg.showDialog(true)
    },
 
- // 获取设计师列表
-    getProductList(){
-      let that=this
-      PItemList({pageIndex:0,pageSize:10}).then(function(res){
-        that.ItemList=res
-      })
-    },
 
    // 设计师新增
    submit(){
     let that=this
-    decorateAdd(that.designerDto).then(function(res){
+    PItemAdd(that.designerDto).then(function(res){
         if(res==''){
-          that.$router.push({path:'/product'})
+          that.$router.push({path:'/product/ItemList'})
         }
       })
-   },
-
-   //分类名称赋值
-   selectChange(e){
-     console.log("够啦啊是大",e)
-       this.designerDto.itemName = this.ItemList.find(f => f.id == e).name;
    },
 
     //图片返回赋值
