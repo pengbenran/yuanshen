@@ -41,10 +41,11 @@ export default {
     return { 
       designerDto: {
        lordImg:'',
+       isLarge:"1",
       },
       selectType:'',
       selectIndex:'',
-      proportion:0.82,
+      proportion:1.742,
       formLabelWidth:'120px'
     }
   },
@@ -52,13 +53,6 @@ export default {
   mounted(){
     let that=this
     this.designerDto = this.$route.query;
-    console.log(this.designerDto)
-    if(this.designerDto.idx==0){
-      that.proportion=0.819
-    }
-    else{
-      that.proportion=1.742
-    }
   },
   methods: {
    UpLoadShow(type,index){

@@ -26,7 +26,7 @@
       <el-input v-model="AddData.measure" placeholder="请输入尺寸" autocomplete="off">
       </el-input>
     </el-form-item>
-    <el-form-item label="面积" :label-width="formLabelWidth"  prop="measure" v-else>
+    <el-form-item label="面积" :label-width="formLabelWidth"  prop="measure" v-if="goodType==2">
       <el-input v-model="AddData.measure" placeholder="请输入面积" autocomplete="off">
       </el-input>
     </el-form-item>
@@ -49,11 +49,24 @@
     <el-form-item label="整体特色" :label-width="formLabelWidth"  prop="texture" v-if="goodType==2">
       <el-input v-model="AddData.texture" placeholder="请输入整体特色" autocomplete="off"></el-input>
     </el-form-item> 
+    <el-form-item label="轮播背景图" :label-width="formLabelWidth" v-if="goodType==3">
+      <div class="avatar-uploader imagesBoxList" v-for="(item,index) in imgReels" :key="index" :index='index' @click="UpLoadShow(index)">
+        <img :src="item" class="boxImg">
+      </div>
+      <div class="avatar-uploader imagesBoxList" @click="UpLoadShow(0)">
+            <i class="el-icon-plus avatar-uploader-icon boxImg"></i>
+        </div>
 
-    <el-form-item label="商品说明" :label-width="formLabelWidth"  prop="productDeclare">
+    </el-form-item> 
+
+
+
+    <el-form-item label="产品理念" :label-width="formLabelWidth"  prop="productDeclare" v-if="goodType==3">
+      <el-input v-model="AddData.productDeclare" placeholder="请输入产品理念" autocomplete="off"></el-input>
+    </el-form-item> 
+    <el-form-item label="商品说明" :label-width="formLabelWidth"  prop="productDeclare" v-else>
       <el-input v-model="AddData.productDeclare" placeholder="请输入商品说明" autocomplete="off"></el-input>
     </el-form-item>      
-        
     <el-form-item label="商品图片" :label-width="formLabelWidth"  prop="imgUrls">
       <div class="avatar-uploader imagesBoxList" v-for="(item,index) in AddData.imgUrls" :key="index">
         <img :src="item" class="avatar boxImg">
@@ -65,8 +78,7 @@
     <el-form-item label="淘宝连接" :label-width="formLabelWidth"  prop="taobaoLink" v-if="goodType==1">
       <el-input v-model="AddData.taobaoLink" placeholder="请输入淘宝连接" autocomplete="off"></el-input>
     </el-form-item>  
-
-    <el-form-item label="标签" :label-width="formLabelWidth"  prop="labels">
+    <el-form-item label="标签" :label-width="formLabelWidth"  prop="labels"  v-if="goodType==1||goodType==2">
       <el-checkbox-group v-model="AddData.labels">
         <el-checkbox v-for="item in labelListData" :key="item.id" :label="item.id">{{item.name}}</el-checkbox>
       </el-checkbox-group>
@@ -98,8 +110,8 @@ export default {
                itemId:'',
                labels:[],
                type:''
-
            },
+           imgReels:[],
            goodType:1,
            formLabelWidth:'120px',
            AddDatarules:{
@@ -131,12 +143,12 @@ export default {
                 { required: true, message: '请设置图片', trigger: 'blur' },
              ],
            },
-           typeList:[{value:'1',name:'普通商品'},{value:'2',name:'整装商品'}],
+           typeList:[{value:'1',name:'普通商品'},{value:'2',name:'整装商品'},{value:'3',name:'大型工装'}],
            GoodsCatList:[],
            ChilerGoodsCatList:[],
            ChilerTwoGoodsCatList:[],
            labelListData:[],
-           proportion:1, //设置图片比例
+           proportion:2.546, //设置图片比例
            imageIndex:'',//轮播时指定的下标
            ImgType:1,
            selectIndex:''
@@ -156,6 +168,9 @@ export default {
       //点击保存
       ClcikAddData(){
         let that = this;
+        if(that.goodType==3){
+          that.AddData.texture=that.imgReels.join(',')
+        }
         GoodAdd(that.AddData).then(res => {
           if(res == ''){
             that.$message({ message: '添加成功', type: 'success'});
@@ -250,10 +265,10 @@ export default {
         GetDataImg(ImgUrl){
           let that = this;
           if(that.selectIndex==0){
-            that.AddData.imgUrls.push(ImgUrl)
+            that.imgReels.push(ImgUrl)
           }
           else{
-            that.AddData.imgUrls[that.selectIndex]=ImgUrl
+            that.imgReels[that.selectIndex]=ImgUrl
           } 
         } 
         },

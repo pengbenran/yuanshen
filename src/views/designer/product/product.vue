@@ -34,33 +34,43 @@
   </div>
 </template>
 <script>
-  import {productList,decorateDelete} from '@/api/product'
+  import {productList,decorateDelete,PItemList} from '@/api/product'
   export default {
     data () {
       return {
         productList:[],
         formLabelWidth:'120px',
         listQuery:{
-          key:'',
-          pageIndex:0,
-          pageSize:10
+          pageIndex:1,
+          pageSize:20
         }
       }
     },
     mounted () {
       let that=this
-      that.getProductList()
+      that.getItemList()
     },
     components: {},
     methods: { 
-      // 获取设计师列表
-      getProductList(){
+      // 获取产品设计分类
+      getItemList(){
         let that=this
-        productList(that.listQuery).then(function(res){
-          that.productList=res
+        that.productList=[]
+        PItemList(that.listQuery).then(function(res){
+          for(var i in res){
+            that.getProductList(res[i])
+          }
         })
       },
-      // 删除设计师
+      // 获取产品设计列表
+      getProductList(row){
+        let that=this
+        productList(that.listQuery,row.id).then(function(res){
+          that.productList=that.productList.concat(res)
+          console.log('that.productList',that.productList)
+        })
+      },
+      // 删除产品设计
       removeproduct(id){
         let params={}
         let that=this

@@ -13,18 +13,6 @@
         <i v-else class="el-icon-plus avatar-uploader-icon">
         </i></div>
     </el-form-item>
-    <!--<el-form-item label="产品详情" :label-width="formLabelWidth"  prop="subject">
-      <Editors v-model="designerDto.imgUrls[0]" ref="Editor"/>
-    </el-form-item> -->
-    <!-- <el-form-item label="图片集" :label-width="formLabelWidth"  prop="photo">
-      <div class="avatar-uploader imagesBoxList" v-for="(item,index) in designerDto.imgUrls" :key="item" :index='index'  @click="UpLoadShow(2,index)">
-        <img :src="item" class="avatar boxImg">
-      </div>
-      <div class="avatar-uploader imagesBoxList"  @click="UpLoadShow(2,1)">
-        <i class="el-icon-plus avatar-uploader-icon boxImg"></i>
-      </div>
-    </el-form-item> -->
- 
   </el-form>
    <Uploadimg ref='UploadImg' @GetDataImg='GetDataImg' :proportion='proportion'/>
    <div slot="footer" class="dialog-footer">
@@ -47,7 +35,7 @@ export default {
       },
       selectType:'',
       selectIndex:'',
-      proportion:0.82,
+      proportion:1.742,
       formLabelWidth:'120px'
     }
   },
@@ -96,7 +84,7 @@ export default {
 display: inline-block;height: 178px;width: 1780px;
 }
 .imagesBoxList{
-    display: inline-block;height: 180px;width: 180px;
+    display: inline-block;height: 180px;width: 313px;
 }
 .avatar-uploader{
     border: 1px dashed #d9d9d9;
@@ -109,16 +97,16 @@ display: inline-block;height: 178px;width: 1780px;
 .avatar-uploader .avatar-uploader-icon,.avatar-uploader img{
     font-size: 28px;
     color: #8c939d;
-    width: 178px;
+    width: 313px;
     height: 178px;
     line-height: 178px;
     text-align: center;
 }
 .avatar-uploader .boxImg{
-    display: inline-block;height: 178px;width: 178px;
+    display: inline-block;height: 178px;width: 313px;
 }
 .avatar-uploader .avatar{
-    display: inline-block;height: 178px;width: 178px;
+    display: inline-block;height: 178px;width: 313px;
 }
 </style>
 

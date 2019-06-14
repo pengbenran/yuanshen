@@ -26,7 +26,7 @@
       <el-input v-model="AddData.measure" placeholder="请输入尺寸" autocomplete="off">
       </el-input>
     </el-form-item>
-    <el-form-item label="面积" :label-width="formLabelWidth"  prop="measure" v-else>
+    <el-form-item label="面积" :label-width="formLabelWidth"  prop="measure" v-if="goodType==2">
       <el-input v-model="AddData.measure" placeholder="请输入面积" autocomplete="off">
       </el-input>
     </el-form-item>
@@ -43,15 +43,28 @@
       </el-select>
     </el-form-item>
     </el-form-item>
-
-    <el-form-item label="材质" :label-width="formLabelWidth"  prop="texture">
-      <el-input v-model="AddData.texture" placeholder="请输入质地" autocomplete="off"></el-input>
+    <el-form-item label="材质" :label-width="formLabelWidth"  prop="texture" v-if="goodType==1">
+      <el-input v-model="AddData.texture" placeholder="请输入材质" autocomplete="off"></el-input>
+    </el-form-item>
+    <el-form-item label="整体特色" :label-width="formLabelWidth"  prop="texture" v-if="goodType==2">
+      <el-input v-model="AddData.texture" placeholder="请输入整体特色" autocomplete="off"></el-input>
     </el-form-item> 
+    <el-form-item label="轮播背景图" :label-width="formLabelWidth" v-if="goodType==3">
+      <div class="avatar-uploader imagesBoxList" v-for="(item,index) in imgReels" :key="index" :index='index' @click="UpLoadShow(index)">
+        <img :src="item" class="boxImg">
+      </div>
+      <div class="avatar-uploader imagesBoxList" @click="UpLoadShow(-1)">
+            <i class="el-icon-plus avatar-uploader-icon boxImg"></i>
+        </div>
+    </el-form-item>
 
-    <el-form-item label="商品详情" :label-width="formLabelWidth"  prop="productDeclare">
-      <el-input v-model="AddData.productDeclare" placeholder="请输入商品详情" autocomplete="off"></el-input>
-    </el-form-item>      
-        
+    <el-form-item label="产品理念" :label-width="formLabelWidth"  prop="productDeclare" v-if="goodType==3">
+      <el-input v-model="AddData.productDeclare" placeholder="请输入产品理念" autocomplete="off"></el-input>
+    </el-form-item> 
+    <el-form-item label="商品说明" :label-width="formLabelWidth"  prop="productDeclare" v-else>
+      <el-input v-model="AddData.productDeclare" placeholder="请输入商品说明" autocomplete="off"></el-input>
+    </el-form-item> 
+     
     <el-form-item label="商品图片" :label-width="formLabelWidth"  prop="imgUrls">
       <div class="avatar-uploader imagesBoxList" v-for="(item,index) in AddData.imgUrls" :key="item" :index='index'  @click="UpLoadShow(index)">
         <img :src="item" class="avatar boxImg">
@@ -64,7 +77,7 @@
       <el-input v-model="AddData.taobaoLink" placeholder="请输入淘宝连接" autocomplete="off"></el-input>
     </el-form-item>  
 
-    <el-form-item label="标签" :label-width="formLabelWidth"  prop="labels">
+    <el-form-item label="标签" :label-width="formLabelWidth"  prop="labels" v-if="goodType==1||goodType==2">
      <el-checkbox-group v-model="AddData.labels">
         <el-checkbox v-for="item in labelListData" :key="item.id" :label="item.id">{{item.name}}</el-checkbox>
       </el-checkbox-group>
@@ -97,6 +110,7 @@ export default {
                labels:[],
                labelsList:[],
            },
+           imgReels:[],
            itemId1:'',
            formLabelWidth:'120px',
            AddDatarules:{
@@ -122,12 +136,12 @@ export default {
                 { required: true, message: '请设置标签', trigger: 'blur' },
              ],
            },
-          typeList:[{value:'1',name:'普通商品'},{value:'2',name:'整装商品'}],
+           typeList:[{value:'1',name:'普通商品'},{value:'2',name:'整装商品'},{value:'3',name:'大型工装'}],
            GoodsCatList:[],
            ChilerGoodsCatList:[],
            ChilerTwoGoodsCatList:[],
            labelListData:[],
-           proportion:1, //设置图片比例
+           proportion:2.546, //设置图片比例
            selectIndex:'',//轮播时指定的下标
            goodType:1,
         }
@@ -153,6 +167,9 @@ export default {
       //点击保存
       ClcikUpdataData(){
         let that = this;
+        if(that.goodType==3){
+          that.AddData.texture=that.imgReels.join(',')
+        }
         UpdataGood(that.AddData).then(res => {
           if(res == ''){
             that.$message({ message: '修改成功', type: 'success'});
@@ -169,7 +186,9 @@ export default {
         let that=this
         params.id=id
         getGoodInfo(params).then(function(res){
-          console.log(res);
+          if(res.type==3){
+            that.imgReels=res.texture.split(',')
+          }
           that.AddData=res
         })
       },
@@ -248,8 +267,12 @@ export default {
       //图片返回赋值
       GetDataImg(ImgUrl){
         let that=this
-        that.AddData.imgUrls.splice(that.selectIndex,1)
-        that.AddData.imgUrls.push(ImgUrl)    
+        if(that.selectIndex==-1){
+          that.imgReels.push(ImgUrl)
+        }
+        else{
+           that.$set(that.imgReels,that.selectIndex,ImgUrl)
+        }   
       },
     }
     }
