@@ -1,7 +1,7 @@
 <template>
     <div style="display: inline-block;">
         <input type="file" name="file" id="file" class="inputfile" accept="image/png, image/jpeg, image/gif, image/jpg" @change="changepic" ref="Elinput"   multiple /> 
-        <div class="avatar-uploader imagesBoxList" v-for="(item,index) in fileList" :key="index" v-if='item.upbool' @click="choiceImg">
+        <div class="avatar-uploader imagesBoxList s1" v-for="(item,index) in fileList" :key="index" v-if='item.upbool' @click="choiceImg">
             <img :src="item.url" class="avatar boxImg">
             <span @click.stop='deleImg(index)'><i class="el-icon-error"></i></span>
         </div>
@@ -68,7 +68,9 @@
         let that = this;
         this.fileList.map((v,index) => {
             console.log("你好世界",v)
-            that.UpLoadImgList(v,index)
+            if(v.upbool == true){
+              that.UpLoadImgList(v,index)
+            }
         })
     },
 
@@ -85,8 +87,11 @@
             })
         }).then(res => {
             console.log(index,"上传图片的返回值",res)
-            that.fileList[index].upbool = false;
-            this.$emit('UpListImg',res)
+            if(res != undefined){
+                that.fileList[index].upbool = false;
+                // that.fileList.splice(index, 1);
+                this.$emit('UpListImg',res)
+            }
             this.$message({
             message: '恭喜你，图片上传成功',
             type: 'success'

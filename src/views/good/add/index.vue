@@ -62,7 +62,8 @@
 
 
     <el-form-item label="产品理念" :label-width="formLabelWidth"  prop="productDeclare" v-if="goodType==3">
-      <el-input v-model="AddData.productDeclare" placeholder="请输入产品理念" autocomplete="off"></el-input>
+      <!-- <el-input v-model="AddData.productDeclare" placeholder="请输入产品理念" autocomplete="off"></el-input> -->
+      <el-input type="textarea"  v-model="AddData.productDeclare" :autosize="{ minRows: 4, maxRows: 4}" placeholder="请输入产品理念" autocomplete="off"></el-input>
     </el-form-item> 
     <el-form-item label="商品说明" :label-width="formLabelWidth"  prop="productDeclare" v-else>
       <el-input v-model="AddData.productDeclare" placeholder="请输入商品说明" autocomplete="off"></el-input>
